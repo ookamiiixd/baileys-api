@@ -1,0 +1,4 @@
+node_modules/
+sessions/*
+!sessions/.dump
+package-lock.json

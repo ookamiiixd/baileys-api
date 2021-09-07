@@ -1,0 +1,21 @@
+{
+  "name": "baileys-api",
+  "version": "1.0.0",
+  "description": "Simple WhatsApp API",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "author": "ookamiiixd",
+  "license": "MIT",
+  "repository": {
+    "url": "git@github.com:ookamiiixd/baileys-api.git"
+  },
+  "dependencies": {
+    "@adiwajshing/baileys": "^3.5.2",
+    "express": "^4.17.1",
+    "express-validator": "^6.12.1",
+    "qrcode": "^1.4.4",
+    "socket.io": "^4.2.0"
+  }
+}
