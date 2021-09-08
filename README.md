@@ -25,3 +25,6 @@ This endpoint used to send a text message (*currently only can be used to send a
 + ``sender`` The session ID that already created.
 + ``receiver`` The receiver phone number in format: ``[country  code without +][phone number]``.
 + ``message`` The message.
+
+## Notice
+This project is intended for learning purpose only. Don't use it for any activities that prohibited by WhatsApp.
