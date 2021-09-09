@@ -15,7 +15,11 @@
     "@adiwajshing/baileys": "^3.5.2",
     "express": "^4.17.1",
     "express-validator": "^6.12.1",
+    "lodash.clonedeep": "^4.5.0",
     "qrcode": "^1.4.4",
     "socket.io": "^4.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
   }
 }

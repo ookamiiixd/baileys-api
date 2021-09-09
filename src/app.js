@@ -1,30 +1,31 @@
-const express = require('express'),
-app = express(),
-bodyParser = require('body-parser'),
+const app = require('express')(),
 http = require('http').Server(app),
 io = require('socket.io')(http),
+bodyParser = require('body-parser'),
+{ response } = require('./response'),
 whatsapp = require('./whatsapp'),
-routes = require('./routes')
-
-whatsapp.init()
+{ listen } = require('./socket'),
+chats = require('./routes/chatsRouter'),
+groups = require('./routes/groupsRouter')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-app.use('/', routes)
+app.use('/chats', chats)
+app.use('/groups', groups)
 
-io.on('connection', socket => {
-    socket.emit('init', whatsapp.getActiveSessions())
-
-    socket.on('add', session => {
-        if(whatsapp.checkSession(session)) return socket.emit('message', 'Session already exists.')
-
-        whatsapp.createSession(socket, session)
-        .catch(err => {
-            console.log('unexpected error: ' + err)
-            socket.emit('message', 'An error occured during creating session.')
-        })
-    })
+app.get('/', (req, res) => {
+    res.sendFile('./index.html', {root: __dirname})
 })
 
-http.listen(8000, () => console.log('listening on http://localhost:8000/'))
+app.all('*', (req, res) => {
+    response(res, 404, {success: false, message: 'The requested url cannot be found.'})
+})
+
+whatsapp.init()
+
+http.listen(8000, () => {
+    listen(io, whatsapp)
+
+    console.log('Server listening on http://localhost:8000/')
+})

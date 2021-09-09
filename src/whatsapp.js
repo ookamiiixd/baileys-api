@@ -1,20 +1,33 @@
 const fs = require('fs'),
 path = require('path'),
 qrcode = require('qrcode'),
+clone = require('lodash.clonedeep'),
 { WAConnection } = require('@adiwajshing/baileys')
 
 let sessions = [],
 connections = {}
 
+const getChats = (session, type) => {
+    let chats = clone(
+        session.chats.filter((item => type == 'group' ? item.jid.includes('@g.us') : item.jid.includes('@s.whatsapp.net'))).all()
+    )
+
+    return chats.map(chat => {
+        if('messages' in chat) delete chat['messages']
+
+        return chat
+    })
+}
+
 const createExistedSession = async session => {
     let wa = new WAConnection()
 
     wa.browserDescription = ['Windows', 'Chrome', '10']
-    wa.loadAuthInfo(path.join(__dirname, '..', 'sessions', `${session}.json`))
+    wa.loadAuthInfo(path.join(__dirname, 'sessions', `${session}.json`))
 
     wa.on('open', () => {
-        let authInfo = wa.base64EncodedAuthInfo()
-        fs.writeFileSync(path.join(__dirname, '..', 'sessions', `${session}.json`), JSON.stringify(authInfo, null, '\t'))
+        const authInfo = wa.base64EncodedAuthInfo()
+        fs.writeFileSync(path.join(__dirname, 'sessions', `${session}.json`), JSON.stringify(authInfo, null, '\t'))
 
         sessions.push(session)
         connections[session] = wa
@@ -24,7 +37,7 @@ const createExistedSession = async session => {
     wa.on('close', () => deleteSession(session))
 
     await wa.connect()
-    .catch(err => console.log('unexpected error: ' + err))
+    .catch(err => console.log('Unexpected error: ' + err))
 }
 
 const createSession = async (socket, session) => {
@@ -45,8 +58,8 @@ const createSession = async (socket, session) => {
     })
 
     wa.on('open', () => {
-        let authInfo = wa.base64EncodedAuthInfo()
-        fs.writeFileSync(path.join(__dirname, '..', 'sessions', `${session}.json`), JSON.stringify(authInfo, null, '\t'))
+        const authInfo = wa.base64EncodedAuthInfo()
+        fs.writeFileSync(path.join(__dirname, 'sessions', `${session}.json`), JSON.stringify(authInfo, null, '\t'))
 
         sessions.push(session)
         connections[session] = wa
@@ -61,12 +74,12 @@ const createSession = async (socket, session) => {
 
         socket.emit('deleted', session)
     })
-
+    
     return await wa.connect()
 }
 
 const deleteSession = session => {
-    if(fs.existsSync(path.join(__dirname, '..', 'sessions', `${session}.json`))) fs.unlinkSync(path.join(__dirname, '..', 'sessions', `${session}.json`))
+    if(fs.existsSync(path.join(__dirname, 'sessions', `${session}.json`))) fs.unlinkSync(path.join(__dirname, 'sessions', `${session}.json`))
 
     delete connections[session]
 
@@ -98,8 +111,14 @@ const formatPhone = phone => {
     return formatted += '@s.whatsapp.net'
 }
 
+const formatGroup = group => {
+    let formatted = group.replace(/[^\d\-]/g, '')
+
+    return formatted += '@g.us'
+}
+
 const init = () => {
-    fs.readdir(path.join(__dirname, '..', 'sessions'), (err, files) => {
+    fs.readdir(path.join(__dirname, 'sessions'), (err, files) => {
         if(err) throw err
 
         files.forEach(file => {
@@ -111,9 +130,11 @@ const init = () => {
 module.exports = {
     init: init,
     formatPhone: formatPhone,
+    formatGroup: formatGroup,
     getSession: getSession,
     getActiveSessions: getActiveSessions,
     checkSession: checkSession,
     createSession: createSession,
-    deleteSession: deleteSession
+    deleteSession: deleteSession,
+    getChats: getChats
 }
