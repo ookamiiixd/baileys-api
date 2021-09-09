@@ -1,4 +1,4 @@
 node_modules/
 sessions/*
-!sessions/.dump
+!sessions/.gitignore
 package-lock.json
