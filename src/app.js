@@ -7,16 +7,14 @@ whatsapp = require('./whatsapp'),
 { listen } = require('./socket'),
 chats = require('./routes/chatsRouter'),
 groups = require('./routes/groupsRouter')
+sessions = require('./routes/sessionRouter')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 app.use('/chats', chats)
 app.use('/groups', groups)
-
-app.get('/', (req, res) => {
-    res.sendFile('./index.html', {root: __dirname})
-})
+app.use('/sessions', sessions)
 
 app.all('*', (req, res) => {
     response(res, 404, {success: false, message: 'The requested url cannot be found.'})

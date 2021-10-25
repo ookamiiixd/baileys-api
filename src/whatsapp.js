@@ -40,7 +40,7 @@ const createExistedSession = async session => {
     .catch(err => console.log('Unexpected error: ' + err))
 }
 
-const createSession = async (socket, session) => {
+const createSession = async (session) => {
     let wa = new WAConnection()
 
     wa.browserDescription = ['Windows', 'Chrome', '10']
@@ -51,9 +51,8 @@ const createSession = async (socket, session) => {
 
     wa.on('qr', qr => {
         qrcode.toDataURL(qr, (err, url) => {
-            if(err) socket.emit('message', 'An error occured during creating QR image.')
-
-            socket.emit('qr', {id: session, qr: url})
+            //save session
+            console.log(qr)
         })
     })
 
@@ -65,14 +64,10 @@ const createSession = async (socket, session) => {
         connections[session] = wa
 
         clearTimeout(timeout)
-
-        socket.emit('added', session)
     })
 
     wa.on('close', () => {
         deleteSession(session)
-
-        socket.emit('deleted', session)
     })
     
     return await wa.connect()
