@@ -13,4 +13,10 @@ router.post(
     controller.createSession
 )
 
+router.delete(
+    '/',
+    body('session').notEmpty(),
+    controller.destroySession
+)
+
 module.exports = router

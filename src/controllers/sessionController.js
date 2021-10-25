@@ -13,18 +13,33 @@ const createSession = (req, res) => {
     })
 
     whatsapp.createSession(null, session)
-        .then(() => {
-            response(res, 200, {
-                success: true,
-                message: "New session created."
-            })
+    .catch(err => {
+        response(res, 422, {
+            error: 'Error creating session.',
+            message: err
         })
-        .catch(err => {
-            response(res, 422, {
-                error: 'Error creating session.',
-                message: err
-            })
-        })
+    })
+
+    response(res, 200, {success: true, data: "Creating session...waiting to connection."})
+}
+
+const destroySession = (req, res) => {
+    
+    const errors = validationResult(req)
+    if(!errors.isEmpty()) return response(res, 400, {success: false, message: 'Please fill out all required inputs.'})
+
+    const session = req.body.session;
+
+    if(! whatsapp.checkSession(session)) {
+        return response(res, 400, {
+            error: 'Session not exists.'}
+            )
+    }
+
+    whatsapp.deleteSession(session)
+
+    response(res, 200, {success: true, message: "Session destroyed."})
+
 }
 
 const getActiveSessions = (req, res) => {
@@ -38,5 +53,6 @@ const getActiveSessions = (req, res) => {
 
 module.exports = {
     createSession: createSession,
-    getActiveSessions: getActiveSessions
+    getActiveSessions: getActiveSessions,
+    destroySession: destroySession
 }
