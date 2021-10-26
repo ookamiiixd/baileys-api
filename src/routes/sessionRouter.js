@@ -19,4 +19,9 @@ router.delete(
     controller.destroySession
 )
 
+router.get(
+    '/qrcode',
+    controller.getQRCode
+)
+
 module.exports = router

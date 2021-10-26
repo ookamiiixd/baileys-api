@@ -46,17 +46,22 @@ const createSession = async (session) => {
     wa.browserDescription = ['Windows', 'Chrome', '10']
 
     let timeout = setTimeout(() => {
+        if(fs.existsSync(path.join(__dirname, 'data', `session_qrcode.json`))) fs.unlinkSync(path.join(__dirname, 'data', `session_qrcode.json`))
         wa.close()
     }, 60000)
 
     wa.on('qr', qr => {
-        qrcode.toDataURL(qr, (err, url) => {
-            //save session
-            console.log(qr)
+
+        qrcode.toDataURL(qr).then(url => {
+            console.log(url)
+            fs.writeFileSync(path.join(__dirname, 'data', `session_qrcode.json`), JSON.stringify(url, null, '\t'))
         })
     })
 
     wa.on('open', () => {
+
+        if(fs.existsSync(path.join(__dirname, 'data', `session_qrcode.json`))) fs.unlinkSync(path.join(__dirname, 'data', `session_qrcode.json`))
+
         const authInfo = wa.base64EncodedAuthInfo()
         fs.writeFileSync(path.join(__dirname, 'sessions', `${session}.json`), JSON.stringify(authInfo, null, '\t'))
 
@@ -113,6 +118,8 @@ const formatGroup = group => {
 }
 
 const init = () => {
+    if(fs.existsSync(path.join(__dirname, 'data', `session_qrcode.json`))) fs.unlinkSync(path.join(__dirname, 'data', `session_qrcode.json`))
+
     fs.readdir(path.join(__dirname, 'sessions'), (err, files) => {
         if(err) throw err
 

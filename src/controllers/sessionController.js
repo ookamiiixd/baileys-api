@@ -1,4 +1,6 @@
-const { response } = require('../response'),
+const fs = require('fs'),
+path = require('path'),
+{ response } = require('../response'),
 { validationResult } = require('express-validator'),
 whatsapp = require('../whatsapp')
 
@@ -13,12 +15,13 @@ const createSession = (req, res) => {
     })
 
     whatsapp.createSession(null, session)
-    .catch(err => {
-        response(res, 422, {
-            error: 'Error creating session.',
-            message: err
-        })
-    })
+
+    // .catch(err => {
+    //     response(res, 422, {
+    //         error: 'Error creating session.',
+    //         message: err
+    //     })
+    // })
 
     response(res, 200, {success: true, data: "Creating session...waiting to connection."})
 }
@@ -51,8 +54,22 @@ const getActiveSessions = (req, res) => {
 
 }
 
+const getQRCode = (req, res) => {
+    
+    if(!fs.existsSync(path.join(__dirname, '../data', `session_qrcode.json`))) {
+        response(res, 404, {error: true, message: "QRCode session not found."})
+        return
+    }
+
+    const fileBuffer = fs.readFileSync(path.join(__dirname, '../data', `session_qrcode.json`))
+
+    response(res, 200, {success: true, qrcode: JSON.parse(fileBuffer)})
+
+}
+
 module.exports = {
     createSession: createSession,
     getActiveSessions: getActiveSessions,
-    destroySession: destroySession
+    destroySession: destroySession,
+    getQRCode: getQRCode
 }
