@@ -43,6 +43,8 @@ const createExistedSession = async session => {
 const createSession = async (session) => {
     let wa = new WAConnection()
 
+    console.log("Creating session: " + session)
+
     wa.browserDescription = ['Windows', 'Chrome', '10']
 
     let timeout = setTimeout(() => {
@@ -53,7 +55,6 @@ const createSession = async (session) => {
     wa.on('qr', qr => {
 
         qrcode.toDataURL(qr).then(url => {
-            console.log(url)
             fs.writeFileSync(path.join(__dirname, 'data', `session_qrcode.json`), JSON.stringify(url, null, '\t'))
         })
     })

@@ -14,7 +14,7 @@ const createSession = (req, res) => {
         error: 'Session already exists.'
     })
 
-    whatsapp.createSession(null, session)
+    whatsapp.createSession(session)
 
     // .catch(err => {
     //     response(res, 422, {
@@ -23,7 +23,7 @@ const createSession = (req, res) => {
     //     })
     // })
 
-    response(res, 200, {success: true, data: "Creating session...waiting to connection."})
+    response(res, 200, {success: true, data: "Creating session...waiting QRCode validation."})
 }
 
 const destroySession = (req, res) => {
