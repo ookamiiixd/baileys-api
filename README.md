@@ -40,7 +40,30 @@ This endpoint will return list of your groups.
 
 **Parameters**
 + ``session`` The session ID that already created.
+
 ---
+
+### ``POST /groups/group-create``
+This endpoint used to create group.
+
+**Parameters**
++ ``sender`` The session ID that already created.
++ ``name`` The group name.
++ ``members`` List of numbers. Example:  ``"5511999999999,5511988888888"``
+
+---
+
+The server will respond in format:
+```javascript
+{
+    success: true|false,
+    message: "",
+    groupId: {}
+}
+```
+
+---
+
 
 ### ``POST /groups/send``
 This endpoint used to send a text message to a group.

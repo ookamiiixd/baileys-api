@@ -118,6 +118,21 @@ const formatGroup = group => {
     return formatted += '@g.us'
 }
 
+const formatNumberGroup = phone => {
+    let text = phone
+    let split = text.split(',')
+    let numbers = []
+
+    function format(elemento){
+        numbers.push(elemento.concat("@s.whatsapp.net"))
+        return text;
+    }
+
+    split.forEach(format)
+
+    return numbers
+}
+
 const init = () => {
     if(fs.existsSync(path.join(__dirname, 'data', `session_qrcode.json`))) fs.unlinkSync(path.join(__dirname, 'data', `session_qrcode.json`))
 
@@ -139,5 +154,6 @@ module.exports = {
     checkSession: checkSession,
     createSession: createSession,
     deleteSession: deleteSession,
-    getChats: getChats
+    getChats: getChats,
+    formatNumberGroup: formatNumberGroup
 }

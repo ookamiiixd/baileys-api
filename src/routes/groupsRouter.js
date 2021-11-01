@@ -16,4 +16,12 @@ router.post(
     controller.sendMessage
 )
 
+router.post(
+    '/group-create',
+    body('sender').notEmpty(),
+    body('name').notEmpty(),
+    body('members').notEmpty(),
+    controller.groupCreate
+)
+
 module.exports = router
