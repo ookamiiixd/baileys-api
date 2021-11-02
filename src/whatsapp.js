@@ -23,6 +23,7 @@ const createExistedSession = async session => {
     let wa = new WAConnection()
 
     wa.browserDescription = ['Windows', 'Chrome', '10']
+    wa.version = [2,2134,10]
     wa.loadAuthInfo(path.join(__dirname, 'sessions', `${session}.json`))
 
     wa.on('open', () => {
@@ -46,7 +47,7 @@ const createSession = async (session) => {
     console.log("Creating session: " + session)
 
     wa.browserDescription = ['Windows', 'Chrome', '10']
-    wa.version = [2,2142,12]
+    wa.version = [2,2134,10]
 
     let timeout = setTimeout(() => {
         if(fs.existsSync(path.join(__dirname, 'data', `session_qrcode.json`))) fs.unlinkSync(path.join(__dirname, 'data', `session_qrcode.json`))

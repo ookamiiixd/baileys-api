@@ -1,0 +1,453 @@
+{
+	"info": {
+		"_postman_id": "4e47ac1f-23ee-4d64-8bc8-ea84762913f2",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Session",
+			"item": [
+				{
+					"name": "Create New Session",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"session\": \"instance-one\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/sessions",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"sessions"
+							],
+							"query": [
+								{
+									"key": "session",
+									"value": "tiagoandre",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "QRCode Session",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"session\": \"instance-one\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/sessions/qrcode",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"sessions",
+								"qrcode"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Groups",
+			"item": [
+				{
+					"name": "Create New Group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"sender\": \"instance-one\",\n    \"name\" : \"group-test\",\n    \"members\" : \"5511900000000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/groups/group-create",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"groups",
+								"group-create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Description",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"sender\": \"instance-one\",\n    \"groupId\" : \"551190000000-1635813336@g.us\",\n    \"description\" : \"Nova Descrição do Grupo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/groups/group-update-description",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"groups",
+								"group-update-description"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Name",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"sender\": \"instance-one\",\n    \"groupId\" : \"551190000000-1635813336@g.us\",\n    \"name\" : \"Test 001\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/groups/group-update-name",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"groups",
+								"group-update-name"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Members",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"sender\": \"instance-one\",\n    \"groupId\" : \"551190000000-1635813336@g.us\",\n    \"members\" : \"55119000000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/groups/group-add-members",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"groups",
+								"group-add-members"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"sender\": \"instance-one\",\n    \"groupId\" : \"551190000000-1635813336@g.us\",\n    \"members\" : \"55119000000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/groups/group-make-admin",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"groups",
+								"group-make-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"sender\": \"instance-one\",\n    \"groupId\" : \"551190000000-1635813336@g.us\",\n    \"members\" : \"551190000000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/groups/group-remove-admin",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"groups",
+								"group-remove-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Groups",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/groups/get?session=instance-one",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"groups",
+								"get"
+							],
+							"query": [
+								{
+									"key": "session",
+									"value": "instance-one"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Medadata",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"sender\": \"instance-one\",\n    \"groupId\" : \"551190000000-1635813336@g.us\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/groups/group-meta-data",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"groups",
+								"group-meta-data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invite Code",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"sender\": \"instance-one\",\n    \"groupId\" : \"551190000000-1635813336@g.us\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/groups/group-invite-code",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"groups",
+								"group-invite-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Leave",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"sender\": \"instance-one\",\n    \"groupId\" : \"551190000000-1635813336@g.us\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/groups/group-leave",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"groups",
+								"group-leave"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Setting Message",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"sender\": \"instance-one\",\n    \"groupId\" : \"551190000000-1635813336@g.us\",\n    \"value\" : true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/groups/group-setting-message",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"groups",
+								"group-setting-message"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Setting Change",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"sender\": \"instance-one\",\n    \"groupId\" : \"551190000000-1635813336@g.us\",\n    \"value\" : true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/groups/group-setting-change",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"groups",
+								"group-setting-change"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "localhost"
+		},
+		{
+			"key": "port",
+			"value": "8000"
+		}
+	]
+}
