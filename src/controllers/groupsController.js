@@ -57,8 +57,39 @@ const groupCreate = (req, res) => {
         .catch(err => response(res, 500, {success: false, message: res}))
 }
 
+const groupAdd = (req, res) => {
+
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) return response(res, 400, {success: false, message: 'Please fill out all required inputs.'})
+
+    const session = whatsapp.getSession(req.body.sender)
+    const groupId = req.body.groupId
+    const members = whatsapp.formatNumberGroup(req.body.members)
+
+    if (!session) return response(res, 404, {success: false, message: 'The requested session cannot be found.'})
+
+    async function groupAdd() {
+        try {
+            let group = await session.groupAdd(groupId, members)
+            console.log(group)
+            return group
+        } catch (error) {
+            return error
+        }
+    }
+
+    groupAdd()
+        .then((success) => response(res, 200, {
+            success: true,
+            message: 'New members successfully added.',
+        }))
+        .catch(err => response(res, 500, {success: false, message: res}))
+
+}
+
 module.exports = {
     getChats: getChats,
     sendMessage: sendMessage,
-    groupCreate: groupCreate
+    groupCreate: groupCreate,
+    groupAdd: groupAdd
 }
