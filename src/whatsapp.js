@@ -22,6 +22,7 @@ const getChats = (session, type) => {
 const createExistedSession = async session => {
     let wa = new WAConnection()
 
+	wa.version = [3, 3234, 9]
     wa.browserDescription = ['Windows', 'Chrome', '10']
     wa.loadAuthInfo(path.join(__dirname, 'sessions', `${session}.json`))
 
@@ -43,6 +44,7 @@ const createExistedSession = async session => {
 const createSession = async (socket, session) => {
     let wa = new WAConnection()
 
+	wa.version = [3, 3234, 9]
     wa.browserDescription = ['Windows', 'Chrome', '10']
 
     let timeout = setTimeout(() => {
