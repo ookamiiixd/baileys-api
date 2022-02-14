@@ -2,6 +2,10 @@
 
 An implementation of [@adiwajshing/Baileys](https://github.com/adiwajshing/Baileys) as a simple RESTful API service with multiple device support.
 
+---
+
+Note: this branch is intended for the **normal WhatsApp Web** user. If you're using **Beta Multi-Device**, use the [beta-md](https://github.com/ookamiiixd/baileys-api/tree/beta-md) branch instead.
+
 ## Installation
 
 1. Download or clone this repo.
