@@ -21,4 +21,6 @@ router.post(
     controller.send
 )
 
+router.post('/send-bulk', query('id').notEmpty(), requestValidator, sessionValidator, controller.sendBulk)
+
 export default router
