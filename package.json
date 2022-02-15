@@ -1,6 +1,6 @@
 {
   "name": "baileys-api",
-  "description": "A Simple RESTful WhatsApp API",
+  "description": "Simple RESTful WhatsApp API",
   "private": true,
   "main": "app.js",
   "type": "module",
@@ -11,11 +11,6 @@
     "type": "git",
     "url": "git+https://github.com/ookamiiixd/baileys-api.git"
   },
-  "keywords": [
-    "whatsapp",
-    "api",
-    "rest"
-  ],
   "author": "ookamiiixd <ookamiiixd@gmail.com>",
   "bugs": {
     "url": "https://github.com/ookamiiixd/baileys-api/issues"

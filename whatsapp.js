@@ -1,10 +1,13 @@
 import { existsSync, unlinkSync, readdir } from 'fs'
 import { join } from 'path'
 import makeWASocket, {
-    Browsers,
+    makeWALegacySocket,
     useSingleFileAuthState,
+    useSingleFileLegacyAuthState,
     makeInMemoryStore,
+    Browsers,
     DisconnectReason,
+    delay,
 } from '@adiwajshing/baileys'
 import { toDataURL } from 'qrcode'
 import __dirname from './dirname.js'
@@ -43,24 +46,56 @@ const shouldReconnect = (sessionId) => {
     return false
 }
 
-const createSession = async (sessionId, res = null) => {
-    const { state, saveState } = useSingleFileAuthState(sessionsDir(sessionId))
+const createSession = async (sessionId, isLegacy = false, res = null) => {
+    const prefix = isLegacy ? 'legacy_' : 'md_'
+
     const store = makeInMemoryStore({})
+    const { state, saveState } = isLegacy
+        ? useSingleFileLegacyAuthState(sessionsDir(prefix + sessionId))
+        : useSingleFileAuthState(sessionsDir(prefix + sessionId))
 
     /**
-     * @type {ReturnType<makeWASocket>}
+     * @type {import('@adiwajshing/baileys').AnyWASocket}
      */
-    const wa = makeWASocket.default({
-        auth: state,
-        printQRInTerminal: true,
-        browser: Browsers.ubuntu('Chrome'),
-    })
+    const wa = isLegacy
+        ? makeWALegacySocket({
+              auth: state,
+              printQRInTerminal: true,
+              browser: Browsers.ubuntu('Chrome'),
+          })
+        : makeWASocket.default({
+              auth: state,
+              printQRInTerminal: true,
+              browser: Browsers.ubuntu('Chrome'),
+          })
 
-    store.readFromFile(sessionsDir(`${sessionId}_store`))
-    store.bind(wa.ev)
-    sessions.set(sessionId, { ...wa, store })
+    if (!isLegacy) {
+        store.readFromFile(sessionsDir(`${sessionId}_store`))
+        store.bind(wa.ev)
+    }
+
+    sessions.set(sessionId, { ...wa, store, isLegacy })
 
     wa.ev.on('creds.update', saveState)
+
+    wa.ev.on('chats.set', ({ chats }) => {
+        store.chats.insertIfAbsent(...chats)
+    })
+
+    wa.ev.on('messages.upsert', async (m) => {
+        const message = m.messages[0]
+
+        if (!message.key.fromMe && m.type === 'notify') {
+            await delay(1000)
+
+            if (isLegacy) {
+                await wa.chatRead(message.key, 1)
+            } else {
+                await wa.sendReadReceipt(message.key.remoteJid, message.key.participant, [message.key.id])
+            }
+        }
+    })
+
     wa.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect } = update
         const statusCode = lastDisconnect?.error?.output?.statusCode
@@ -75,12 +110,12 @@ const createSession = async (sessionId, res = null) => {
                     response(res, 500, false, 'Unable to create session.')
                 }
 
-                return deleteSession(sessionId)
+                return deleteSession(sessionId, isLegacy)
             }
 
             setTimeout(
                 () => {
-                    createSession(sessionId, res)
+                    createSession(sessionId, isLegacy, res)
                 },
                 statusCode === DisconnectReason.restartRequired ? 0 : parseInt(process.env.RECONNECT_INTERVAL ?? 0)
             )
@@ -103,22 +138,24 @@ const createSession = async (sessionId, res = null) => {
                 await wa.logout()
             } catch {
             } finally {
-                deleteSession(sessionId)
+                deleteSession(sessionId, isLegacy)
             }
         }
     })
 }
 
 /**
- * @returns {(ReturnType<makeWASocket>|null)}
+ * @returns {(import('@adiwajshing/baileys').AnyWASocket|null)}
  */
 const getSession = (sessionId) => {
     return sessions.get(sessionId) ?? null
 }
 
-const deleteSession = (sessionId) => {
-    if (isSessionFileExists(sessionId)) {
-        unlinkSync(sessionsDir(sessionId))
+const deleteSession = (sessionId, isLegacy = false) => {
+    const prefix = isLegacy ? 'legacy_' : 'md_'
+
+    if (isSessionFileExists(prefix + sessionId)) {
+        unlinkSync(sessionsDir(prefix + sessionId))
     }
 
     if (isSessionFileExists(`${sessionId}_store`)) {
@@ -135,6 +172,44 @@ const getChatList = (sessionId, isGroup = false) => {
     return getSession(sessionId).store.chats.filter((chat) => {
         return chat.id.endsWith(filter)
     })
+}
+
+/**
+ * @param {import('@adiwajshing/baileys').AnyWASocket} session
+ */
+const isExists = async (session, jid, isGroup = false) => {
+    try {
+        let result
+
+        if (isGroup) {
+            result = await session.groupMetadata(jid)
+
+            return Boolean(result.id)
+        }
+
+        if (session.isLegacy) {
+            result = await session.onWhatsApp(jid)
+        } else {
+            ;[result] = await session.onWhatsApp(jid)
+        }
+
+        return result.exists
+    } catch {
+        return false
+    }
+}
+
+/**
+ * @param {import('@adiwajshing/baileys').AnyWASocket} session
+ */
+const sendMessage = async (session, receiver, message) => {
+    try {
+        await delay(1000)
+
+        return session.sendMessage(receiver, message)
+    } catch {
+        return Promise.reject(null) // eslint-disable-line prefer-promise-reject-errors
+    }
 }
 
 const formatPhone = (phone) => {
@@ -161,7 +236,9 @@ const cleanup = () => {
     console.log('Running cleanup before exit.')
 
     sessions.forEach((session, sessionId) => {
-        session.store.writeToFile(sessionsDir(`${sessionId}_store`))
+        if (!session.isLegacy) {
+            session.store.writeToFile(sessionsDir(`${sessionId}_store`))
+        }
     })
 }
 
@@ -172,9 +249,19 @@ const init = () => {
         }
 
         for (const file of files) {
-            if (file.endsWith('.json') && !file.includes('_store')) {
-                createSession(file.replace('.json', ''))
+            if (
+                !file.endsWith('.json') ||
+                (!file.startsWith('md_') && !file.startsWith('legacy_')) ||
+                file.includes('_store')
+            ) {
+                continue
             }
+
+            const filename = file.replace('.json', '')
+            const isLegacy = file.split('_', 1)[0] !== 'md'
+            const sessionId = filename.substring(isLegacy ? 7 : 3)
+
+            createSession(sessionId, isLegacy)
         }
     })
 }
@@ -185,6 +272,8 @@ export {
     getSession,
     deleteSession,
     getChatList,
+    isExists,
+    sendMessage,
     formatPhone,
     formatGroup,
     cleanup,

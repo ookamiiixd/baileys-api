@@ -1,4 +1,4 @@
-import { getSession, getChatList, formatPhone } from './../whatsapp.js'
+import { getSession, getChatList, isExists, sendMessage, formatPhone } from './../whatsapp.js'
 import response from './../response.js'
 
 const getList = (req, res) => {
@@ -11,13 +11,13 @@ const send = async (req, res) => {
     const { message } = req.body
 
     try {
-        const [isExists] = await session.onWhatsApp(receiver)
+        const exists = await isExists(session, receiver)
 
-        if (!isExists.exists) {
+        if (!exists) {
             return response(res, 400, false, 'The receiver number is not exists.')
         }
 
-        await session.sendMessage(receiver, { text: message })
+        await sendMessage(session, receiver, { text: message })
 
         response(res, 200, true, 'The message has been successfully sent.')
     } catch {
@@ -39,15 +39,15 @@ const sendBulk = async (req, res) => {
         data.receiver = formatPhone(data.receiver)
 
         try {
-            const [isExists] = await session.onWhatsApp(data.receiver)
+            const exists = await isExists(session, data.receiver)
 
-            if (!isExists.exists) {
+            if (!exists) {
                 errors.push(key)
 
                 continue
             }
 
-            await session.sendMessage(data.receiver, { text: data.message })
+            await sendMessage(session, data.receiver, { text: data.message })
         } catch {
             errors.push(key)
         }

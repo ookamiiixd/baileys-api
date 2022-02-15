@@ -1,4 +1,4 @@
-import { getSession, getChatList, formatGroup } from './../whatsapp.js'
+import { getSession, getChatList, isExists, sendMessage, formatGroup } from './../whatsapp.js'
 import response from './../response.js'
 
 const getList = (req, res) => {
@@ -11,13 +11,13 @@ const send = async (req, res) => {
     const { message } = req.body
 
     try {
-        const groupMeta = await session.groupMetadata(receiver)
+        const exists = await isExists(session, receiver, true)
 
-        if (!groupMeta.id) {
+        if (!exists) {
             return response(res, 400, false, 'The group is not exists.')
         }
 
-        await session.sendMessage(receiver, { text: message })
+        await sendMessage(session, receiver, { text: message })
 
         response(res, 200, true, 'The message has been successfully sent.')
     } catch {
