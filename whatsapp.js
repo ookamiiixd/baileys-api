@@ -47,27 +47,26 @@ const shouldReconnect = (sessionId) => {
 }
 
 const createSession = async (sessionId, isLegacy = false, res = null) => {
-    const prefix = isLegacy ? 'legacy_' : 'md_'
+    const sessionFile = (isLegacy ? 'legacy_' : 'md_') + sessionId
 
     const store = makeInMemoryStore({})
     const { state, saveState } = isLegacy
-        ? useSingleFileLegacyAuthState(sessionsDir(prefix + sessionId))
-        : useSingleFileAuthState(sessionsDir(prefix + sessionId))
+        ? useSingleFileLegacyAuthState(sessionsDir(sessionFile))
+        : useSingleFileAuthState(sessionsDir(sessionFile))
+
+    /**
+     * @type {(import('@adiwajshing/baileys').LegacySocketConfig|import('@adiwajshing/baileys').SocketConfig)}
+     */
+    const waConfig = {
+        auth: state,
+        printQRInTerminal: true,
+        browser: Browsers.ubuntu('Chrome'),
+    }
 
     /**
      * @type {import('@adiwajshing/baileys').AnyWASocket}
      */
-    const wa = isLegacy
-        ? makeWALegacySocket({
-              auth: state,
-              printQRInTerminal: true,
-              browser: Browsers.ubuntu('Chrome'),
-          })
-        : makeWASocket.default({
-              auth: state,
-              printQRInTerminal: true,
-              browser: Browsers.ubuntu('Chrome'),
-          })
+    const wa = isLegacy ? makeWALegacySocket(waConfig) : makeWASocket.default(waConfig)
 
     if (!isLegacy) {
         store.readFromFile(sessionsDir(`${sessionId}_store`))
@@ -79,7 +78,9 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
     wa.ev.on('creds.update', saveState)
 
     wa.ev.on('chats.set', ({ chats }) => {
-        store.chats.insertIfAbsent(...chats)
+        if (isLegacy) {
+            store.chats.insertIfAbsent(...chats)
+        }
     })
 
     wa.ev.on('messages.upsert', async (m) => {
@@ -152,14 +153,15 @@ const getSession = (sessionId) => {
 }
 
 const deleteSession = (sessionId, isLegacy = false) => {
-    const prefix = isLegacy ? 'legacy_' : 'md_'
+    const sessionFile = (isLegacy ? 'legacy_' : 'md_') + sessionId
+    const storeFile = `${sessionId}_store`
 
-    if (isSessionFileExists(prefix + sessionId)) {
-        unlinkSync(sessionsDir(prefix + sessionId))
+    if (isSessionFileExists(sessionFile)) {
+        unlinkSync(sessionsDir(sessionFile))
     }
 
-    if (isSessionFileExists(`${sessionId}_store`)) {
-        unlinkSync(sessionsDir(`${sessionId}_store`))
+    if (isSessionFileExists(storeFile)) {
+        unlinkSync(sessionsDir(storeFile))
     }
 
     sessions.delete(sessionId)
@@ -258,7 +260,7 @@ const init = () => {
             }
 
             const filename = file.replace('.json', '')
-            const isLegacy = file.split('_', 1)[0] !== 'md'
+            const isLegacy = filename.split('_', 1)[0] !== 'md'
             const sessionId = filename.substring(isLegacy ? 7 : 3)
 
             createSession(sessionId, isLegacy)
