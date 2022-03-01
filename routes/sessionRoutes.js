@@ -11,4 +11,6 @@ router.post('/add', body('id').notEmpty(), body('isLegacy').notEmpty(), requestV
 
 router.delete('/delete/:id', controller.del)
 
+router.get('/lists', controller.lists)
+
 export default router
