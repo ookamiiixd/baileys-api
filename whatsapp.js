@@ -168,6 +168,10 @@ const deleteSession = (sessionId, isLegacy = false) => {
     retries.delete(sessionId)
 }
 
+const listSession = () => {
+	return [...sessions].map(([name, value]) => ({ name, value }));
+}
+
 const getChatList = (sessionId, isGroup = false) => {
     const filter = isGroup ? '@g.us' : '@s.whatsapp.net'
 
@@ -280,4 +284,5 @@ export {
     formatGroup,
     cleanup,
     init,
+    listSession
 }
