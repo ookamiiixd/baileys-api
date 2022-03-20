@@ -12,6 +12,7 @@ import makeWASocket, {
 import { toDataURL } from 'qrcode'
 import __dirname from './dirname.js'
 import response from './response.js'
+import { webhook } from './config/webhook.js'
 
 const sessions = new Map()
 const retries = new Map()
@@ -83,7 +84,15 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
         }
     })
 
+    wa.ev.on('groups.update',  async (chats) => {
+        //WEBHOOK
+        webhook(sessionId, 'groups', chats)
+    })
+
     wa.ev.on('messages.upsert', async (m) => {
+        //WEBHOOK
+        webhook(sessionId, 'messages', m)
+                
         const message = m.messages[0]
 
         if (!message.key.fromMe && m.type === 'notify') {
@@ -98,6 +107,9 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
     })
 
     wa.ev.on('connection.update', async (update) => {
+        //WEBHOOK
+        webhook(sessionId, 'connection', update)
+
         const { connection, lastDisconnect } = update
         const statusCode = lastDisconnect?.error?.output?.statusCode
 
@@ -126,7 +138,6 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
             if (res && !res.headersSent) {
                 try {
                     const qr = await toDataURL(update.qr)
-
                     response(res, 200, true, 'QR code received, please scan the QR code.', { qr })
                 } catch {
                     response(res, 500, false, 'Unable to create QR code.')
