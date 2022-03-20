@@ -1,4 +1,4 @@
-import { getSession, getChatList, isExists, sendMessage, formatGroup } from './../whatsapp.js'
+import { getSession, getChatList, isExists, sendMessage, formatGroup, groupCreate } from './../whatsapp.js'
 import response from './../response.js'
 
 const getList = (req, res) => {
@@ -17,7 +17,7 @@ const send = async (req, res) => {
             return response(res, 400, false, 'The group is not exists.')
         }
 
-        await sendMessage(session, receiver, { text: message })
+        await sendMessage(session, receiver, message)
 
         response(res, 200, true, 'The message has been successfully sent.')
     } catch {
@@ -25,4 +25,16 @@ const send = async (req, res) => {
     }
 }
 
-export { getList, send }
+const postGroupCreate = async (req, res) => {
+    const session = getSession(res.locals.sessionId)
+    try {
+
+        const group = await groupCreate(session, req.body)
+        
+        response(res, 200, true, 'The group was created successfully.', group)
+    } catch {
+        response(res, 500, false, 'Failed to create group.')
+    }
+}
+
+export { getList, send, postGroupCreate }

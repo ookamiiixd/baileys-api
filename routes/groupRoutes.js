@@ -21,4 +21,14 @@ router.post(
     controller.send
 )
 
+router.post(
+    '/create',
+    query('id').notEmpty(),
+    body('name').notEmpty(),
+    body('members').notEmpty(),
+    requestValidator,
+    sessionValidator,
+    controller.postGroupCreate
+)
+
 export default router

@@ -192,6 +192,11 @@ const getChatList = (sessionId, isGroup = false) => {
  */
 const isExists = async (session, jid, isGroup = false) => {
     try {
+
+        if (jid.endsWith('@g.us')) {
+            isGroup = true
+        }
+
         let result
 
         if (isGroup) {
@@ -245,6 +250,16 @@ const formatGroup = (group) => {
     return (formatted += '@g.us')
 }
 
+const checkPhoneOrGroup = (receiver) => {
+    if (receiver.endsWith('@g.us')) {
+        return receiver
+    } else {
+        let formatted = receiver.replace(/\D/g, '')
+
+        return (formatted += '@s.whatsapp.net')
+    }
+}
+
 const cleanup = () => {
     console.log('Running cleanup before exit.')
 
@@ -279,6 +294,70 @@ const init = () => {
     })
 }
 
+/**
+ * Groups Functions
+ */
+
+
+const formatNumberGroup = members => {
+    let text = members
+    let split = text.split(',')
+    let numbers = []
+
+    function format(phone) {
+        numbers.push(formatPhone(phone))
+        return text;
+    }
+
+    split.forEach(format)
+
+    return numbers
+}
+
+const groupCreate = async (session, req) => {
+    return await session.groupCreate(req.name, formatNumberGroup(req.members))
+}
+
+const groupParticipantsUpdate = async (session, req) => {
+    return await session.groupParticipantsUpdate(req.groupId, formatNumberGroup(req.members), req.action)
+}
+
+const groupUpdateSubject = async (session, req) => {
+    return await session.groupUpdateSubject(req.groupId, req.subject)
+}
+
+const groupUpdateDescription = async (session, req) => {
+    return await session.groupUpdateDescription(req.groupId, req.description)
+}
+
+const groupSettingUpdate = async (session, req) => {
+    return await session.groupSettingUpdate(req.groupId, req.settings)
+}
+
+const groupLeave = async (session, req) => {
+    return await session.groupLeave(req.groupId)
+}
+
+const groupInviteCode = async (session, req) => {
+    return await session.groupInviteCode(req.groupId)
+}
+
+const groupRevokeInvite = async (session, req) => {
+    return await session.groupLeave(req.groupId)
+}
+
+const groupMetadata = async (session, req) => {
+    return await session.groupMetadata(req.groupId)
+}
+
+const groupAcceptInvite = async (session, req) => {
+    return await session.groupAcceptInvite(req.invite)
+}
+
+const updateProfilePicture = async (session, req) => {
+    return await session.updateProfilePicture(req.groupId, { url: './uploads/macro.jpg' })
+}
+
 export {
     isSessionExists,
     createSession,
@@ -291,4 +370,16 @@ export {
     formatGroup,
     cleanup,
     init,
+    groupCreate,
+    groupParticipantsUpdate,
+    groupUpdateSubject,
+    groupUpdateDescription,
+    groupSettingUpdate,
+    groupLeave,
+    groupInviteCode,
+    groupMetadata,
+    groupRevokeInvite,
+    groupAcceptInvite,
+    updateProfilePicture,
+    checkPhoneOrGroup
 }
