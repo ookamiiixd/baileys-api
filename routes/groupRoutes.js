@@ -107,5 +107,14 @@ router.post(
     controller.groupAcceptInvite
 )
 
+router.post(
+    '/profile-picture',
+    query('id').notEmpty(),
+    body('url').notEmpty(),
+    requestValidator,
+    sessionValidator,
+    controller.updateProfilePicture
+)
+
 
 export default router

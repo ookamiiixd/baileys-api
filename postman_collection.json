@@ -1387,6 +1387,39 @@
 					"response": []
 				},
 				{
+					"name": "Group Profile Picture",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupId\": \"120363042817789570@g.us\",\n    \"url\": \"https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/group/profile-picture?id={{session}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"group",
+								"profile-picture"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{session}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Group Accept Invite",
 					"request": {
 						"method": "POST",

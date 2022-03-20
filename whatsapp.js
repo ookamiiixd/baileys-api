@@ -13,6 +13,7 @@ import { toDataURL } from 'qrcode'
 import __dirname from './dirname.js'
 import response from './response.js'
 import { webhook } from './config/webhook.js'
+import { downloadImage } from './config/download.js'
 
 const sessions = new Map()
 const retries = new Map()
@@ -355,7 +356,11 @@ const acceptInvite = async (session, req) => {
 }
 
 const profilePicture = async (session, req) => {
-    return await session.updateProfilePicture(req.groupId, { url: './uploads/macro.jpg' })
+    const name = Math.floor(Date.now() / 1000)
+
+    const image = await downloadImage(req.url, './uploads/profile/'+name+'.jpg')
+    console.log(image)
+    return await session.updateProfilePicture(req.groupId, { url: image })
 }
 
 export {
