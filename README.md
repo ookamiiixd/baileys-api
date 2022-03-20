@@ -6,7 +6,8 @@ An implementation of [@adiwajshing/Baileys](https://github.com/adiwajshing/Baile
 
 1. Download or clone this repo.
 2. Enter to the project directory.
-3. Execute `npm i` to install the dependencies.
+3. Copy .env.example to .env
+4. Execute `npm i` to install the dependencies.
 
 ## `.env` Configurations
 
