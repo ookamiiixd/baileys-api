@@ -1,4 +1,4 @@
-import { getSession, isExists, sendMessage, formatPhone, checkPhoneOrGroup } from './../whatsapp.js'
+import { getSession, isExists, sendMessage, checkPhoneOrGroup } from './../whatsapp.js'
 import response from './../response.js'
 
 const send = async (req, res) => {
