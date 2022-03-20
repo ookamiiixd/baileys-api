@@ -1085,6 +1085,39 @@
 							"body": "{\n    \"success\": false,\n    \"message\": \"Failed to load messages.\",\n    \"data\": {}\n}"
 						}
 					]
+				},
+				{
+					"name": "Group Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" :\"New API\",\n    \"members\": \"5511982527257,5511954440845\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/group/create?id={{session}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"group",
+								"create"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{session}}"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1098,7 +1131,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"receiver\": \"5511982527257\",\n    \"message\": {\n        \"text\": \"Send Message Text\"\n    }\n}",
+							"raw": "{\n    \"receiver\": \"120363042817789570@g.us\",\n    \"message\": {\n        \"text\": \"Send Message Text\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1106,12 +1139,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/chat/send?id={{session}}",
+							"raw": "{{base_url}}/message/send?id={{session}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"chat",
+								"message",
 								"send"
 							],
 							"query": [
@@ -1286,7 +1319,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"receiver\": \"5511982527257\",\n    \"message\": {\n        \"image\": {\n            \"url\": \"https://media4.giphy.com/media/X7s4uckfyihGJDrSpo/giphy.gif?cid=790b76113a45c886c4362be83724755db582fc0262a4dc59&rid=giphy.gif&ct=g\"\n        },\n        \"caption\": \"Send Message Image with caption\" \n    }\n}",
+							"raw": "{\n    \"receiver\": \"120363042817789570@g.us\",\n    \"message\": {\n        \"image\": {\n            \"url\": \"https://media4.giphy.com/media/X7s4uckfyihGJDrSpo/giphy.gif?cid=790b76113a45c886c4362be83724755db582fc0262a4dc59&rid=giphy.gif&ct=g\"\n        },\n        \"caption\": \"Send Message Image with caption\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1294,12 +1327,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/chat/send?id={{session}}",
+							"raw": "{{base_url}}/message/send?id={{session}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"chat",
+								"message",
 								"send"
 							],
 							"query": [
@@ -1474,7 +1507,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"receiver\": \"5511982527257\",\n    \"message\": {\n        \"location\": {\n            \"degreesLatitude\": 24.121231,\n            \"degreesLongitude\": 55.1121221\n        }\n    }\n}",
+							"raw": "{\n    \"receiver\": \"120363042817789570@g.us\",\n    \"message\": {\n        \"location\": {\n            \"degreesLatitude\": 24.121231,\n            \"degreesLongitude\": 55.1121221\n        }\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1482,12 +1515,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/chat/send?id={{session}}",
+							"raw": "{{base_url}}/message/send?id={{session}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"chat",
+								"message",
 								"send"
 							],
 							"query": [
@@ -1662,7 +1695,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"receiver\": \"5511982527257\",\n    \"message\": {\n        \"video\": {\n            \"url\": \"https://videourl/name.mp4\"\n        },\n        \"caption\": \"hello!\", \n        \"gifPlayback\": false \n    }\n}",
+							"raw": "{\n    \"receiver\": \"120363042817789570@g.us\",\n    \"message\": {\n                \"video\": { \"url\" : \"https://dr.sf-converter.com/download?id=973bc2f6faa3782dd9be68017d06d30fc7d360863d9422116f53dffb87b95c5c&payload=1*eJzVlNtuqzgUhl8l6qi%2BmqSAbQ6VrC1KmoSkaULTHHZvIgIOOBwDhiQdzdPMI8wj7BcbQ%2FZody73aOaiEvpsjGzWv5bX%2F9tNmVWFR5dFfHN%2FE3Kel%2Fd3d6fTqXfJKl7taM%2FLkruTy73wS02UcVDUUTrbnZc3v37fafs%2FvdGtfJb9849Fgbvdbpl2cZBRmmqXXpBlQUxr5tOsPaqd5bF72ble9IWec1ZQIqtI07CuIxlQRpJNpHzN4dbG8yfNWUxPx6NjBYDlRNb1nqyoPd3o6TpgPsm65nNYuNRfe34dLcL1%2BmCs%2BzAws6%2Fq3q5SO0eQrp8fMV%2F65gYw7gZERhK4aibfNYKCHisRR1nG5EJLkITE4SBJCJRvFUtRQZKSD5rEmnhjOGzefJCUxK3EWpYWIKlJIsAIBnlMFARYyrh3Sv1dXhJFkhQsiZ%2FnHkGZt7LknIdsX0ZKGLLF0yo8oEd1Z2BQ50VNZJCwhJI2ybfKIMkRSEti5eZoSmOfLoZGvVruIsmGyS4agoAVbexeTFOiyipEBvCrgkC9J8kyiBPeZBkhrEuKLOsS0hC4rmkaVHVVAftaZBiBiNLcjVlN2%2BP2okJChyTJUINNMsRUU5AKPLJ%2BfABcfMUYKgiK6Ijku%2Fbq4XiZTJ1V4QidbuGK7FyLLDZTJsDyBn4DUY0ml20txORHFZrV3BNsMiGGJhNiSEsBIVSwkSkGoVBQiAMlC4g5O0rOWD%2B9mHYwyo8bu7bf36ZdbzvwDoGldDdTvygu2Dnz%2FWy%2F1unjbOmfrciyB0cTPx2Wo%2FLM%2BOWwfk8XNt1s%2BtaAqYeAQ745LHa6MXa8yRzEf8tKwiaypEETStIEl7TR1o3OvFHxofxiYxPiEFrbs3l6CezQnC8vL1N1pw6cZxg%2Bn4JgLKc7XDj7SfhqeXhi4%2FGgP57BPkYmezSN7LUaXQ51Pk3Wb1Duvm3dxevx3dmpoyF8UKL6fV4%2F9uF2a6Fb2BcN2vbaJ2xQqAG3mZVi2lw6GaKWuKXaUmuoSu2VVFperydqqbXUG2oNoYFa4pZqS63l9avxiRyhLdDPOoJsaNCQ4NUStJ6B9Y%2BWgCDGhipS8t9ZAv5XlnAt%2B%2F9jCk7TcfPJavTkzZy36esRJXSw8t%2Fsc9ccTWIeliZi82h94eV4xQuTPayCWTUsvWVVWRsYLCO9GqTb1A9X4aWOY%2BUoGf5%2BeM6jMT6JhhPPZzIHznhMhTM8f%2Fsj67heQX3Gs86xoh17sZiJlSzl1KNVR5hCJ%2BvM3SpmaZh1hlnw7c%2FOL4swK3gpzrmWsjT5zf0Pl%2Fj9L0uSv1o%3D*1647737241*36dcea382db6b2ab\"}, \n        \"caption\": \"hello!\",\n        \"gifPlayback\": false \n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1670,12 +1703,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/chat/send?id={{session}}",
+							"raw": "{{base_url}}/message/send?id={{session}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"chat",
+								"message",
 								"send"
 							],
 							"query": [
@@ -1850,7 +1883,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"receiver\": \"5511982527257\",\n    \"message\": {\n        \"audio\": {\n            \"url\": \"https://ve32.aadika.xyz/download/QYiXjqESIrA/mp3/128/1647741188/6cbee8dfac5680b35786460468105887d1f6aabb3c0ac683fdcb7efef3f23d6f/1?f=X2Download.com\"\n        },\n        \"ptt\": true \n    }\n}",
+							"raw": "{\n    \"receiver\": \"120363042817789570@g.us\",\n    \"message\": {\n        \"audio\": {\n            \"url\": \"https://ve32.aadika.xyz/download/QYiXjqESIrA/mp3/128/1647741188/6cbee8dfac5680b35786460468105887d1f6aabb3c0ac683fdcb7efef3f23d6f/1?f=X2Download.com\"\n        },\n        \"ptt\": true\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1858,12 +1891,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/chat/send?id={{session}}",
+							"raw": "{{base_url}}/message/send?id={{session}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"chat",
+								"message",
 								"send"
 							],
 							"query": [
@@ -2038,7 +2071,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"receiver\": \"5511982527257\",\n    \"message\": {\n        \"video\": {\n            \"url\": \"https://videourl/name.mp4\"\n        },\n        \"caption\": \"hello!\", \n        \"gifPlayback\": true \n    }\n}",
+							"raw": "{\n    \"receiver\": \"120363042817789570@g.us\",\n    \"message\": {\n        \"video\": {\n            \"url\": \"https://videourl/name.mp4\"\n        },\n        \"caption\": \"hello!\",\n        \"gifPlayback\": true\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2046,12 +2079,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/chat/send?id={{session}}",
+							"raw": "{{base_url}}/message/send?id={{session}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"chat",
+								"message",
 								"send"
 							],
 							"query": [
@@ -2226,7 +2259,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"receiver\": \"5511982527257\",\n    \"message\": {\n        \"text\": \"Hi it's button message\",\n        \"footer\": \"Hello World\",\n        \"buttons\": [\n            {\n                \"buttonId\": \"id1\",\n                \"buttonText\": {\n                    \"displayText\": \"Button 1\"\n                },\n                \"type\": 1\n            },\n            {\n                \"buttonId\": \"id2\",\n                \"buttonText\": {\n                    \"displayText\": \"Button 2\"\n                },\n                \"type\": 2\n            },\n            {\n                \"buttonId\": \"id3\",\n                \"buttonText\": {\n                    \"displayText\": \"Button 3\"\n                },\n                \"type\": 3\n            }\n        ],\n        \"headerType\": 1\n    }\n}",
+							"raw": "{\n    \"receiver\": \"120363042817789570@g.us\",\n    \"message\": {\n        \"text\": \"Hi it's button message\",\n        \"footer\": \"Hello World\",\n        \"buttons\": [\n            {\n                \"buttonId\": \"id1\",\n                \"buttonText\": {\n                    \"displayText\": \"Button 1\"\n                },\n                \"type\": 1\n            },\n            {\n                \"buttonId\": \"id2\",\n                \"buttonText\": {\n                    \"displayText\": \"Button 2\"\n                },\n                \"type\": 2\n            },\n            {\n                \"buttonId\": \"id3\",\n                \"buttonText\": {\n                    \"displayText\": \"Button 3\"\n                },\n                \"type\": 3\n            }\n        ],\n        \"headerType\": 1\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2234,12 +2267,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/chat/send?id={{session}}",
+							"raw": "{{base_url}}/message/send?id={{session}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"chat",
+								"message",
 								"send"
 							],
 							"query": [
@@ -2414,7 +2447,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"receiver\": \"5511982527257\",\n    \"message\": {\n        \"text\": \"Hi it's button message\",\n        \"footer\": \"Hello World\",\n        \"templateButtons\": [\n            {\n                \"index\": 1,\n                \"urlButton\": {\n                    \"displayText\": \"⭐ Star Baileys on GitHub!\",\n                    \"url\": \"https://github.com/adiwajshing/Baileys\"\n                }\n            },\n            {\n                \"index\": 2,\n                \"callButton\": {\n                    \"displayText\": \"Call me!\",\n                    \"phoneNumber\": \"+1 (234) 5678-901\"\n                }\n            },\n            {\n                \"index\": 3,\n                \"quickReplyButton\": {\n                    \"displayText\": \"This is a reply, just like normal buttons!\",\n                    \"id\": \"id-like-buttons-message\"\n                }\n            }\n        ]\n    }\n}",
+							"raw": "{\n    \"receiver\": \"120363042817789570@g.us\",\n    \"message\": {\n        \"text\": \"Hi it's button message\",\n        \"footer\": \"Hello World\",\n        \"templateButtons\": [\n            {\n                \"index\": 1,\n                \"urlButton\": {\n                    \"displayText\": \"⭐ Star Baileys on GitHub!\",\n                    \"url\": \"https://github.com/adiwajshing/Baileys\"\n                }\n            },\n            {\n                \"index\": 2,\n                \"callButton\": {\n                    \"displayText\": \"Call me!\",\n                    \"phoneNumber\": \"+1 (234) 5678-901\"\n                }\n            },\n            {\n                \"index\": 3,\n                \"quickReplyButton\": {\n                    \"displayText\": \"This is a reply, just like normal buttons!\",\n                    \"id\": \"id-like-buttons-message\"\n                }\n            }\n        ]\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2422,12 +2455,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/chat/send?id={{session}}",
+							"raw": "{{base_url}}/message/send?id={{session}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"chat",
+								"message",
 								"send"
 							],
 							"query": [
@@ -2602,7 +2635,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"receiver\": \"5511982527257\",\n    \"message\": {\n        \"text\": \"Hi it's button message\",\n        \"footer\": \"Hello World\",\n        \"title\": \"Amazing boldfaced list title\",\n        \"buttonText\": \"Required, text on the button to view the list\",\n        \"sections\": [\n            {\n                \"title\": \"Section 1\",\n                \"rows\": [\n                    {\n                        \"title\": \"Option 1\",\n                        \"rowId\": \"option1\"\n                    },\n                    {\n                        \"title\": \"Option 2\",\n                        \"rowId\": \"option2\",\n                        \"description\": \"This is a description\"\n                    }\n                ]\n            },\n            {\n                \"title\": \"Section 2\",\n                \"rows\": [\n                    {\n                        \"title\": \"Option 3\",\n                        \"rowId\": \"option3\"\n                    },\n                    {\n                        \"title\": \"Option 4\",\n                        \"rowId\": \"option4\",\n                        \"description\": \"This is a description V2\"\n                    }\n                ]\n            }\n        ]\n    }\n}",
+							"raw": "{\n    \"receiver\": \"120363042817789570@g.us\",\n    \"message\": {\n        \"text\": \"Hi it's button message\",\n        \"footer\": \"Hello World\",\n        \"title\": \"Amazing boldfaced list title\",\n        \"buttonText\": \"Required, text on the button to view the list\",\n        \"sections\": [\n            {\n                \"title\": \"Section 1\",\n                \"rows\": [\n                    {\n                        \"title\": \"Option 1\",\n                        \"rowId\": \"option1\"\n                    },\n                    {\n                        \"title\": \"Option 2\",\n                        \"rowId\": \"option2\",\n                        \"description\": \"This is a description\"\n                    }\n                ]\n            },\n            {\n                \"title\": \"Section 2\",\n                \"rows\": [\n                    {\n                        \"title\": \"Option 3\",\n                        \"rowId\": \"option3\"\n                    },\n                    {\n                        \"title\": \"Option 4\",\n                        \"rowId\": \"option4\",\n                        \"description\": \"This is a description V2\"\n                    }\n                ]\n            }\n        ]\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2610,12 +2643,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/chat/send?id={{session}}",
+							"raw": "{{base_url}}/message/send?id={{session}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"chat",
+								"message",
 								"send"
 							],
 							"query": [
@@ -2796,7 +2829,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"receiver\": \"5511982527257\",\r\n        \"message\": \"Hi bro, how are you?\"\r\n    },\r\n    {\r\n        \"receiver\": \"5511987100003\",\r\n        \"message\": \"I'm fine, thank you.\"\r\n    }\r\n]",
+							"raw": "[\r\n    {\r\n        \"receiver\": \"5511982527257\",\r\n        \"message\": \"Hi bro, how are you?\"\r\n    },\r\n    {\r\n        \"receiver\": \"120363042817789570@g.us\",\r\n        \"message\": \"I'm fine, thank you.\"\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2804,12 +2837,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/chat/send-bulk?id={{session}}",
+							"raw": "{{base_url}}/message/send-bulk?id={{session}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"chat",
+								"message",
 								"send-bulk"
 							],
 							"query": [
@@ -3073,7 +3106,7 @@
 	"variable": [
 		{
 			"key": "base_url",
-			"value": "http://127.0.0.1:3333",
+			"value": "http://127.0.0.1:8000",
 			"type": "string"
 		},
 		{
