@@ -1,4 +1,4 @@
-import { getSession, getChatList, isExists, sendMessage, formatGroup, create, participantsUpdate, updateSubject, updateDescription, settingUpdate, leave, inviteCode, revokeInvite, metaData, acceptInvite } from './../whatsapp.js'
+import { getSession, getChatList, isExists, sendMessage, formatGroup, create, participantsUpdate, updateSubject, updateDescription, settingUpdate, leave, inviteCode, revokeInvite, metaData, acceptInvite, profilePicture } from './../whatsapp.js'
 import response from './../response.js'
 
 const getList = (req, res) => {
@@ -174,6 +174,25 @@ const groupAcceptInvite = async (req, res) => {
     }
 }
 
+const updateProfilePicture = async (req, res) => {
+    const session = getSession(res.locals.sessionId)
+    try {
+
+        const exists = await isExists(session, req.body.groupId)
+
+        if (!exists) {
+            return response(res, 400, false, 'The group is not exists.')
+        }
+
+        await profilePicture(session, req.body)
+
+        response(res, 200, true, 'Update profile picture successfully.')
+
+    } catch {
+        response(res, 500, false, 'Failed Update profile picture.')
+    }
+}
+
 export {
     getList,
     groupCreate,
@@ -185,5 +204,6 @@ export {
     groupInviteCode,
     groupRevokeInvite,
     groupMetadata,
-    groupAcceptInvite
+    groupAcceptInvite,
+    updateProfilePicture
 }
