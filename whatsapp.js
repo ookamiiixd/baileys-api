@@ -314,47 +314,47 @@ const formatNumberGroup = members => {
     return numbers
 }
 
-const groupCreate = async (session, req) => {
+const create = async (session, req) => {
     return await session.groupCreate(req.name, formatNumberGroup(req.members))
 }
 
-const groupParticipantsUpdate = async (session, req) => {
+const participantsUpdate = async (session, req) => {
     return await session.groupParticipantsUpdate(req.groupId, formatNumberGroup(req.members), req.action)
 }
 
-const groupUpdateSubject = async (session, req) => {
+const updateSubject = async (session, req) => {
     return await session.groupUpdateSubject(req.groupId, req.subject)
 }
 
-const groupUpdateDescription = async (session, req) => {
+const updateDescription = async (session, req) => {
     return await session.groupUpdateDescription(req.groupId, req.description)
 }
 
-const groupSettingUpdate = async (session, req) => {
+const settingUpdate = async (session, req) => {
     return await session.groupSettingUpdate(req.groupId, req.settings)
 }
 
-const groupLeave = async (session, req) => {
+const leave = async (session, req) => {
     return await session.groupLeave(req.groupId)
 }
 
-const groupInviteCode = async (session, req) => {
+const inviteCode = async (session, req) => {
     return await session.groupInviteCode(req.groupId)
 }
 
-const groupRevokeInvite = async (session, req) => {
-    return await session.groupLeave(req.groupId)
+const revokeInvite = async (session, req) => {
+    return await session.groupRevokeInvite(req.groupId)
 }
 
-const groupMetadata = async (session, req) => {
+const metaData = async (session, req) => {
     return await session.groupMetadata(req.groupId)
 }
 
-const groupAcceptInvite = async (session, req) => {
+const acceptInvite = async (session, req) => {
     return await session.groupAcceptInvite(req.invite)
 }
 
-const updateProfilePicture = async (session, req) => {
+const profilePicture = async (session, req) => {
     return await session.updateProfilePicture(req.groupId, { url: './uploads/macro.jpg' })
 }
 
@@ -370,16 +370,16 @@ export {
     formatGroup,
     cleanup,
     init,
-    groupCreate,
-    groupParticipantsUpdate,
-    groupUpdateSubject,
-    groupUpdateDescription,
-    groupSettingUpdate,
-    groupLeave,
-    groupInviteCode,
-    groupMetadata,
-    groupRevokeInvite,
-    groupAcceptInvite,
-    updateProfilePicture,
+    create,
+    participantsUpdate,
+    updateSubject,
+    updateDescription,
+    settingUpdate,
+    leave,
+    inviteCode,
+    metaData,
+    revokeInvite,
+    acceptInvite,
+    profilePicture,
     checkPhoneOrGroup
 }
