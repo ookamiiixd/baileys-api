@@ -12,23 +12,100 @@ router.get('/get', query('id').notEmpty(), requestValidator, sessionValidator, c
 router.get('/get/:jid', query('id').notEmpty(), requestValidator, sessionValidator, getMessages)
 
 router.post(
-    '/send',
-    query('id').notEmpty(),
-    body('receiver').notEmpty(),
-    body('message').notEmpty(),
-    requestValidator,
-    sessionValidator,
-    controller.send
-)
-
-router.post(
     '/create',
     query('id').notEmpty(),
     body('name').notEmpty(),
     body('members').notEmpty(),
     requestValidator,
     sessionValidator,
-    controller.postGroupCreate
+    controller.groupCreate
 )
+
+router.post(
+    '/participants-update',
+    query('id').notEmpty(),
+    body('action').notEmpty(),
+    body('groupId').notEmpty(),
+    body('members').notEmpty(),
+    requestValidator,
+    sessionValidator,
+    controller.groupParticipantsUpdate
+)
+
+router.post(
+    '/subject-update',
+    query('id').notEmpty(),
+    body('subject').notEmpty(),
+    body('groupId').notEmpty(),
+    requestValidator,
+    sessionValidator,
+    controller.groupUpdateSubject
+)
+
+router.post(
+    '/description-update',
+    query('id').notEmpty(),
+    body('description').notEmpty(),
+    body('groupId').notEmpty(),
+    requestValidator,
+    sessionValidator,
+    controller.groupUpdateDescription
+)
+
+router.post(
+    '/setting-update',
+    query('id').notEmpty(),
+    body('settings').notEmpty(),
+    body('groupId').notEmpty(),
+    requestValidator,
+    sessionValidator,
+    controller.groupSettingUpdate
+)
+
+router.post(
+    '/leave',
+    query('id').notEmpty(),
+    body('groupId').notEmpty(),
+    requestValidator,
+    sessionValidator,
+    controller.groupLeave
+)
+
+router.post(
+    '/invite-code',
+    query('id').notEmpty(),
+    body('groupId').notEmpty(),
+    requestValidator,
+    sessionValidator,
+    controller.groupInviteCode
+)
+
+router.post(
+    '/revoke-code',
+    query('id').notEmpty(),
+    body('groupId').notEmpty(),
+    requestValidator,
+    sessionValidator,
+    controller.groupRevokeInvite
+)
+
+router.get(
+    '/meta-data',
+    query('id').notEmpty(),
+    body('groupId').notEmpty(),
+    requestValidator,
+    sessionValidator,
+    controller.groupMetadata
+)
+
+router.post(
+    '/accept-invite',
+    query('id').notEmpty(),
+    body('invite').notEmpty(),
+    requestValidator,
+    sessionValidator,
+    controller.groupAcceptInvite
+)
+
 
 export default router

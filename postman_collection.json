@@ -1093,7 +1093,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\" :\"New API\",\n    \"members\": \"5511982527257,5511954440845\"\n}",
+							"raw": "{\n    \"name\" :\"New API 3\",\n    \"members\": \"5511982527257,5511954440845\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1108,6 +1108,306 @@
 							"path": [
 								"group",
 								"create"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{session}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Group Participants Update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupId\" :\"120363040855167359@g.us\",\n    \"members\": \"5511982527257\",\n    \"action\": \"remove\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/group/participants-update?id={{session}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"group",
+								"participants-update"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{session}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Group Subject",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupId\" :\"120363040855167359@g.us\",\n    \"subject\": \"New Name\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/group/subject-update?id={{session}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"group",
+								"subject-update"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{session}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Group Description",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupId\" :\"120363040855167359@g.us\",\n    \"description\": \"New Description\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/group/description-update?id={{session}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"group",
+								"description-update"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{session}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Group Settings",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupId\" :\"120363040855167359@g.us\",\n    \"settings\": \"locked\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/group/setting-update?id={{session}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"group",
+								"setting-update"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{session}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Group Leave",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupId\": \"120363040855167359@g.us\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/group/leave?id={{session}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"group",
+								"leave"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{session}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Group Invite Code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupId\": \"120363042817789570@g.us\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/group/invite-code?id={{session}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"group",
+								"invite-code"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{session}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Group Revoke Code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupId\": \"120363042817789570@g.us\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/group/revoke-code?id={{session}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"group",
+								"revoke-code"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{session}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Group Meda Data",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupId\": \"120363042817789570@g.us\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/group/meta-data?id={{session}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"group",
+								"meta-data"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{session}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Group Accept Invite",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"invite\": \"FGGHhAdg9X9E2DVn90P9XN\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/group/accept-invite?id={{session}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"group",
+								"accept-invite"
 							],
 							"query": [
 								{
