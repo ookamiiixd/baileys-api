@@ -27,7 +27,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "{{session}}",
+									"value": "4b61382a-502b-4239-ac13-1d5afa796928",
 									"description": "Your created session id."
 								}
 							]
@@ -255,7 +255,7 @@
 							"urlencoded": [
 								{
 									"key": "id",
-									"value": "{{session}}",
+									"value": "{{session}}-4",
 									"description": "Session id you want to use.",
 									"type": "default"
 								},
@@ -802,7 +802,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/group/get?id={{session}}",
+							"raw": "{{base_url}}/group/get?id=dd37f0af-191d-4504-a06a-cd381b785c03",
 							"host": [
 								"{{base_url}}"
 							],
@@ -813,7 +813,7 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "{{session}}",
+									"value": "dd37f0af-191d-4504-a06a-cd381b785c03",
 									"description": "Your created session id."
 								}
 							]
@@ -888,7 +888,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/group/get/:jid?id={{session}}&limit=25&cursor_id=REDACTED&cursor_fromMe=true",
+							"raw": "{{base_url}}/group/get/:jid?id={{session}}&limit=25&cursor_fromMe=true",
 							"host": [
 								"{{base_url}}"
 							],
@@ -911,7 +911,8 @@
 								{
 									"key": "cursor_id",
 									"value": "REDACTED",
-									"description": "id field from message key used as cursor to fetch previous messages (Optional)."
+									"description": "id field from message key used as cursor to fetch previous messages (Optional).",
+									"disabled": true
 								},
 								{
 									"key": "cursor_fromMe",
@@ -922,7 +923,7 @@
 							"variable": [
 								{
 									"key": "jid",
-									"value": "120363041144938311@g.us",
+									"value": "120363042817789570@g.us",
 									"description": "Chat jid."
 								}
 							]
@@ -1093,7 +1094,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\" :\"New API 3\",\n    \"members\": \"5511982527257,5511954440845\"\n}",
+							"raw": "{\n    \"name\" :\"Ultimo\",\n    \"members\": \"5511982527257,5511954440845\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1286,8 +1287,11 @@
 				},
 				{
 					"name": "Group Invite Code",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -1393,7 +1397,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"groupId\": \"120363042817789570@g.us\",\n    \"url\": \"https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80\"\n}",
+							"raw": "{\n    \"groupId\": \"120363041022424103@g.us\",\n    \"url\": \"https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8Zm9jdXN8ZW58MHx8MHx8&w=1000&q=80\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3439,12 +3443,12 @@
 	"variable": [
 		{
 			"key": "base_url",
-			"value": "http://127.0.0.1:8000",
+			"value": "http://127.0.0.1:3333",
 			"type": "string"
 		},
 		{
 			"key": "session",
-			"value": "test",
+			"value": "198b5ed2-51e4-45ed-949b-88108808bbb7",
 			"type": "string"
 		}
 	]

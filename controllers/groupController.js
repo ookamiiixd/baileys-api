@@ -1,8 +1,10 @@
-import { getSession, getChatList, isExists, sendMessage, formatGroup, create, participantsUpdate, updateSubject, updateDescription, settingUpdate, leave, inviteCode, revokeInvite, metaData, acceptInvite, profilePicture } from './../whatsapp.js'
+import { getSession, getChatList, isExists, sendMessage, formatGroup, create, participantsUpdate, updateSubject, updateDescription, settingUpdate, leave, inviteCode, revokeInvite, metaData, acceptInvite, profilePicture, getGroupsWithParticipants } from './../whatsapp.js'
 import response from './../response.js'
 
-const getList = (req, res) => {
-    return response(res, 200, true, '', getChatList(res.locals.sessionId, true))
+const getList = async (req, res) => {
+    const session = getSession(res.locals.sessionId)
+    const groups = await getGroupsWithParticipants(session)
+    return response(res, 200, true, '', groups)
 }
 
 const groupCreate = async (req, res) => {
