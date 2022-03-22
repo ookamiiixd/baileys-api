@@ -90,6 +90,11 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
         webhook(sessionId, 'groups', chats)
     })
 
+    wa.ev.on('group-participants.update',  async (chats) => {
+        //WEBHOOK
+        webhook(sessionId, 'participants', chats)
+    })
+
     wa.ev.on('messages.upsert', async (m) => {
         //WEBHOOK
         webhook(sessionId, 'messages', m)
@@ -111,11 +116,14 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
         //WEBHOOK
         webhook(sessionId, 'connection', update)
 
+
+
         const { connection, lastDisconnect } = update
         const statusCode = lastDisconnect?.error?.output?.statusCode
 
         if (connection === 'open') {
             retries.delete(sessionId)
+            webhook(sessionId, 'account', wa.user)
         }
 
         if (connection === 'close') {
@@ -186,6 +194,11 @@ const getChatList = (sessionId, isGroup = false) => {
     return getSession(sessionId).store.chats.filter((chat) => {
         return chat.id.endsWith(filter)
     })
+}
+
+const getGroupsWithParticipants = async (session)=> {
+    const groups = await session.groupFetchAllParticipating()
+    return groups
 }
 
 /**
@@ -356,10 +369,7 @@ const acceptInvite = async (session, req) => {
 }
 
 const profilePicture = async (session, req) => {
-    const name = Math.floor(Date.now() / 1000)
-
-    const image = await downloadImage(req.url, './uploads/profile/'+name+'.jpg')
-    console.log(image)
+    const image = await downloadImage(req.url)
     return await session.updateProfilePicture(req.groupId, { url: image })
 }
 
@@ -386,5 +396,6 @@ export {
     revokeInvite,
     acceptInvite,
     profilePicture,
-    checkPhoneOrGroup
+    checkPhoneOrGroup,
+    getGroupsWithParticipants
 }

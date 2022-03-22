@@ -71,7 +71,7 @@ router.post(
     controller.groupLeave
 )
 
-router.post(
+router.get(
     '/invite-code',
     query('id').notEmpty(),
     body('groupId').notEmpty(),
