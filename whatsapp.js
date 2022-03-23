@@ -12,7 +12,8 @@ import makeWASocket, {
 import { toDataURL } from 'qrcode'
 import __dirname from './dirname.js'
 import response from './response.js'
-import { webhook } from './config/webhook.js'
+import { webhook } from './services/webhook.js'
+import { makeWSClient } from './services/websocket.js'
 import { downloadImage } from './config/download.js'
 
 const sessions = new Map()
@@ -31,7 +32,7 @@ const isSessionFileExists = (name) => {
 }
 
 const shouldReconnect = (sessionId) => {
-    let maxRetries = parseInt(process.env.MAX_RETRIES ?? 0)
+    let maxRetries = parseInt(process.env.MAX_RETRIES ?? 5)
     let attempts = retries.get(sessionId) ?? 0
 
     maxRetries = maxRetries < 1 ? 1 : maxRetries
@@ -47,6 +48,11 @@ const shouldReconnect = (sessionId) => {
 
     return false
 }
+
+// CREATE A WEBSOCKET IF PROTOCOL IS DEFINED AS websocket
+// BY DEFAULT webhook IS SET
+const protocol = process.env.PROTOCOL ?? 'webhook'
+const socket = protocol === 'websocket' ? makeWSClient() : null
 
 const createSession = async (sessionId, isLegacy = false, res = null) => {
     const sessionFile = (isLegacy ? 'legacy_' : 'md_') + sessionId
@@ -85,15 +91,15 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
         }
     })
 
-    wa.ev.on('groups.update',  async (chats) => {
-        //WEBHOOK
+    wa.ev.on('groups.update', async (chats) => {
+        // WEBHOOK
         webhook(sessionId, 'groups', chats)
     })
 
     wa.ev.on('messages.upsert', async (m) => {
-        //WEBHOOK
-        webhook(sessionId, 'messages', m)
-                
+        // WEBHOOK
+        webhook(sessionId, 'messages/upsert', m)
+
         const message = m.messages[0]
 
         if (!message.key.fromMe && m.type === 'notify') {
@@ -108,17 +114,52 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
     })
 
     wa.ev.on('connection.update', async (update) => {
-        //WEBHOOK
-        webhook(sessionId, 'connection', update)
+        // WEBHOOK
+        // webhook(sessionId, 'connection/update', update)
 
         const { connection, lastDisconnect } = update
         const statusCode = lastDisconnect?.error?.output?.statusCode
 
         if (connection === 'open') {
+            switch (protocol) {
+                case 'webhook':
+                    webhook(sessionId, 'connection/open', update)
+                    break
+                case 'websocket':
+                    socket.send(
+                        JSON.stringify({
+                            event: 'wa:connection_open',
+                            sessionId,
+                            update,
+                        })
+                    )
+                    break
+                default:
+            }
+
             retries.delete(sessionId)
         }
 
+        if (connection === 'connecting') {
+            switch (protocol) {
+                case 'webhook':
+                    webhook(sessionId, 'connection/connecting', update)
+                    break
+                case 'websocket':
+                    socket.send(
+                        JSON.stringify({
+                            event: 'wa:connection_connecting',
+                            sessionId,
+                            update,
+                        })
+                    )
+                    break
+                default:
+            }
+        }
+
         if (connection === 'close') {
+            webhook(sessionId, 'connection/close', update)
             if (statusCode === DisconnectReason.loggedOut || !shouldReconnect(sessionId)) {
                 if (res && !res.headersSent) {
                     response(res, 500, false, 'Unable to create session.')
@@ -131,11 +172,27 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
                 () => {
                     createSession(sessionId, isLegacy, res)
                 },
-                statusCode === DisconnectReason.restartRequired ? 0 : parseInt(process.env.RECONNECT_INTERVAL ?? 0)
+                statusCode === DisconnectReason.restartRequired ? 0 : parseInt(process.env.RECONNECT_INTERVAL ?? 5000)
             )
         }
 
         if (update.qr) {
+            switch (protocol) {
+                case 'webhook':
+                    webhook(sessionId, 'connection/qrcode', { image: await toDataURL(update.qr) })
+                    break
+                case 'websocket':
+                    socket.send(
+                        JSON.stringify({
+                            event: 'wa:connection_qrcode',
+                            sessionId,
+                            image: await toDataURL(update.qr),
+                        })
+                    )
+                    break
+                default:
+            }
+
             if (res && !res.headersSent) {
                 try {
                     const qr = await toDataURL(update.qr)
@@ -193,7 +250,6 @@ const getChatList = (sessionId, isGroup = false) => {
  */
 const isExists = async (session, jid, isGroup = false) => {
     try {
-
         if (jid.endsWith('@g.us')) {
             isGroup = true
         }
@@ -299,15 +355,14 @@ const init = () => {
  * Groups Functions
  */
 
-
-const formatNumberGroup = members => {
+const formatNumberGroup = (members) => {
     let text = members
     let split = text.split(',')
     let numbers = []
 
     function format(phone) {
         numbers.push(formatPhone(phone))
-        return text;
+        return text
     }
 
     split.forEach(format)
@@ -358,7 +413,7 @@ const acceptInvite = async (session, req) => {
 const profilePicture = async (session, req) => {
     const name = Math.floor(Date.now() / 1000)
 
-    const image = await downloadImage(req.url, './uploads/profile/'+name+'.jpg')
+    const image = await downloadImage(req.url, './uploads/profile/' + name + '.jpg')
     console.log(image)
     return await session.updateProfilePicture(req.groupId, { url: image })
 }
@@ -386,5 +441,5 @@ export {
     revokeInvite,
     acceptInvite,
     profilePicture,
-    checkPhoneOrGroup
+    checkPhoneOrGroup,
 }
