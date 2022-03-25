@@ -15,6 +15,7 @@ import response from './response.js'
 import { webhook } from './services/webhook.js'
 import { makeWSClient } from './services/websocket.js'
 import { downloadImage } from './config/download.js'
+import { userInfo } from 'os'
 
 const sessions = new Map()
 const retries = new Map()
@@ -124,18 +125,20 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
 
         const { connection, lastDisconnect } = update
         const statusCode = lastDisconnect?.error?.output?.statusCode
+        const userInfo = wa?.user
 
         if (connection === 'open') {
+            const data = Object.assign(update, userInfo)
             switch (protocol) {
                 case 'webhook':
-                    webhook(sessionId, 'connection/open', update)
+                    webhook(sessionId, 'connection/open', data)
                     break
                 case 'websocket':
                     socket.send(
                         JSON.stringify({
                             event: 'wa:connection_open',
                             sessionId,
-                            update,
+                            data
                         })
                     )
                     break
