@@ -52,7 +52,7 @@ const shouldReconnect = (sessionId) => {
 
 // CREATE A WEBSOCKET IF PROTOCOL IS DEFINED AS websocket
 // BY DEFAULT webhook IS SET
-const protocol = process.env.PROTOCOL ?? 'webhook'
+const protocol = process.env.PROTOCOL ?? 'http'
 const socket = protocol === 'websocket' ? makeWSClient() : null
 
 const createSession = async (sessionId, isLegacy = false, res = null) => {
@@ -130,7 +130,7 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
         if (connection === 'open') {
             const data = Object.assign(update, userInfo)
             switch (protocol) {
-                case 'webhook':
+                case 'http':
                     webhook(sessionId, 'connection/open', data)
                     break
                 case 'websocket':
@@ -150,7 +150,7 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
 
         if (connection === 'connecting') {
             switch (protocol) {
-                case 'webhook':
+                case 'http':
                     webhook(sessionId, 'connection/connecting', update)
                     break
                 case 'websocket':
@@ -186,7 +186,7 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
 
         if (update.qr) {
             switch (protocol) {
-                case 'webhook':
+                case 'http':
                     webhook(sessionId, 'connection/qrcode', { image: await toDataURL(update.qr) })
                     break
                 case 'websocket':
