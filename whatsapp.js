@@ -94,12 +94,12 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
 
     wa.ev.on('groups.update', async (chats) => {
         // WEBHOOK
-        webhook(sessionId, 'groups', chats)
+        webhook(sessionId, 'groups/update', chats)
     })
 
     wa.ev.on('group-participants.update', async (chats) => {
         // WEBHOOK
-        webhook(sessionId, 'participants', chats)
+        webhook(sessionId, 'groups/participants', chats)
     })
 
     wa.ev.on('messages.upsert', async (m) => {
