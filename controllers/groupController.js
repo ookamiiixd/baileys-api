@@ -7,6 +7,11 @@ const getList = async (req, res) => {
     return response(res, 200, true, '', groups)
 }
 
+
+const getListWithoutParticipants = async (req, res) => {
+    return response(res, 200, true, '', getChatList(res.locals.sessionId, true))
+}
+
 const groupCreate = async (req, res) => {
     const session = getSession(res.locals.sessionId)
     try {
@@ -207,5 +212,6 @@ export {
     groupRevokeInvite,
     groupMetadata,
     groupAcceptInvite,
-    updateProfilePicture
+    updateProfilePicture,
+    getListWithoutParticipants
 }

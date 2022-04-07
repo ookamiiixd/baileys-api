@@ -12,6 +12,7 @@ const webhook = async (instance, type, data) => {
             return success
         })
         .catch((error) => {
+            console.log(error)
             return error
         })
 }
