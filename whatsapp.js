@@ -254,7 +254,7 @@ const getChatList = (sessionId, isGroup = false) => {
 }
 
 const getGroupsWithParticipants = async (session) => {
-    const groups = await session.groupFetchAllParticipating()
+    const groups = await session.extractGroupMetadata()
     return groups
 }
 
