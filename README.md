@@ -2,11 +2,15 @@
 
 An implementation of [@adiwajshing/Baileys](https://github.com/adiwajshing/Baileys) as a simple RESTful API service with multiple device support. This project implements both **Legacy** (Normal WhatsApp Web) and **Beta Multi-Device** client so that you can choose and use one of them easily.
 
+## Requirements
+
+-   **NodeJS** version **14.5.0** or higher.
+
 ## Installation
 
 1. Download or clone this repo.
 2. Enter to the project directory.
-3. Execute `npm i` to install the dependencies.
+3. Install the dependencies.
 
 ## `.env` Configurations
 
@@ -44,13 +48,16 @@ The server will respond in following JSON format:
 ```
 
 ## Known Issue
-- Logging out from your phone manually when the session is still active **will kill the entire app** after a few minutes. As for now you should only destroy a session by using the **delete session endpoint** to avoid this issue. This issue only occurs for **Beta Multi-Device** users.
+
+-   ~~Logging out from your phone manually when the session is still active **will kill the entire app** after a few minutes. As for now you should only destroy a session by using the **delete session endpoint** to avoid this issue. This issue only occurs for **Beta Multi-Device** users~~. This issue should be solved on Baileys version **4.1.0** (Tested).
 
 ## Notes
-- The app only provide a very simple validation, you may want to implement your own.
-- There's no authentication, you may want to implement your own.
-- The **Beta Multi-Device** client use provided baileys's `makeInMemoryStore` method which will store your data in memory and a json file, you may want to use a better data management.
-- **There's no reading message occured before sending message**. The reading message only occurs when the client received message from someone, it will read them immediately. You should always read messages before starting the app and start sending messages to avoid abnormal detection.
+
+-   The app only provide a very simple validation, you may want to implement your own.
+-   There's no authentication, you may want to implement your own.
+-   The **Beta Multi-Device** client use provided Baileys's `makeInMemoryStore` method which will store your data in memory and a json file, you may want to use a better data management.
+-   Automatically reading incoming messages is now disabled by default. Uncomment `whatsapp.js:91-105` to enable this behaviour.
+-   If you have problems when deploying on **CPanel** or any other similar hosting, transpiling your code into **CommonJS** should fix the problems.
 
 ## Notice
 

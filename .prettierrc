@@ -4,5 +4,13 @@
     "useTabs": false,
     "endOfLine": "lf",
     "semi": false,
-    "singleQuote": true
+    "singleQuote": true,
+    "overrides": [
+        {
+            "files": "*.json",
+            "options": {
+                "tabWidth": 2
+            }
+        }
+    ]
 }

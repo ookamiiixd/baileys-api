@@ -1,14 +1,14 @@
 import { Router } from 'express'
-import sessionRoutes from './routes/sessionRoutes.js'
-import chatRoutes from './routes/chatRoutes.js'
-import groupRoutes from './routes/groupRoutes.js'
+import sessionsRoute from './routes/sessionsRoute.js'
+import chatsRoute from './routes/chatsRoute.js'
+import groupsRoute from './routes/groupsRoute.js'
 import response from './response.js'
 
 const router = Router()
 
-router.use('/session', sessionRoutes)
-router.use('/chat', chatRoutes)
-router.use('/group', groupRoutes)
+router.use('/sessions', sessionsRoute)
+router.use('/chats', chatsRoute)
+router.use('/groups', groupsRoute)
 
 router.all('*', (req, res) => {
     response(res, 404, false, 'The requested url cannot be found.')

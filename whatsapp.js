@@ -1,5 +1,6 @@
 import { existsSync, unlinkSync, readdir } from 'fs'
 import { join } from 'path'
+import pino from 'pino'
 import makeWASocket, {
     makeWALegacySocket,
     useSingleFileAuthState,
@@ -49,17 +50,20 @@ const shouldReconnect = (sessionId) => {
 const createSession = async (sessionId, isLegacy = false, res = null) => {
     const sessionFile = (isLegacy ? 'legacy_' : 'md_') + sessionId
 
-    const store = makeInMemoryStore({})
+    const logger = pino({ level: 'warn' })
+    const store = makeInMemoryStore({ logger })
+
     const { state, saveState } = isLegacy
         ? useSingleFileLegacyAuthState(sessionsDir(sessionFile))
         : useSingleFileAuthState(sessionsDir(sessionFile))
 
     /**
-     * @type {(import('@adiwajshing/baileys').LegacySocketConfig|import('@adiwajshing/baileys').SocketConfig)}
+     * @type {import('@adiwajshing/baileys').CommonSocketConfig}
      */
     const waConfig = {
         auth: state,
         printQRInTerminal: true,
+        logger,
         browser: Browsers.ubuntu('Chrome'),
     }
 
@@ -83,6 +87,8 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
         }
     })
 
+    // Automatically read incoming messages, uncomment below codes to enable this behaviour
+    /*
     wa.ev.on('messages.upsert', async (m) => {
         const message = m.messages[0]
 
@@ -96,6 +102,7 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
             }
         }
     })
+    */
 
     wa.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect } = update
@@ -128,11 +135,11 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
                     const qr = await toDataURL(update.qr)
 
                     response(res, 200, true, 'QR code received, please scan the QR code.', { qr })
+
+                    return
                 } catch {
                     response(res, 500, false, 'Unable to create QR code.')
                 }
-
-                return
             }
 
             try {
