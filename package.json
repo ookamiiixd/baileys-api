@@ -25,6 +25,7 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "express-validator": "^6.14.0",
+    "jimp": "^0.16.1",
     "node-cleanup": "^2.1.2",
     "pino": "^7.10.0",
     "qrcode": "^1.5.0",
