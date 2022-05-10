@@ -9,7 +9,10 @@ const router = Router()
 
 router.get('/', query('id').notEmpty(), requestValidator, sessionValidator, controller.getList)
 
+router.get('/meta/:jid', query('id').notEmpty(), requestValidator, sessionValidator, controller.getGroupMetaData)
+
 router.get('/:jid', query('id').notEmpty(), requestValidator, sessionValidator, getMessages)
+
 
 router.post(
     '/send',

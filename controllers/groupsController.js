@@ -1,8 +1,19 @@
-import { getSession, getChatList, isExists, sendMessage, formatGroup } from './../whatsapp.js'
+import { getSession, getChatList, isExists, sendMessage, formatGroup, getGroupMeta } from './../whatsapp.js'
 import response from './../response.js'
 
 const getList = (req, res) => {
     return response(res, 200, true, '', getChatList(res.locals.sessionId, true))
+}
+
+const getGroupMetaData = async (req, res) => {
+    const session = getSession(res.locals.sessionId)
+    const jid = req.params.jid
+    let data
+
+
+    data = await getGroupMeta(session, jid)
+
+    response(res, 200, true, '', data)
 }
 
 const send = async (req, res) => {
@@ -25,4 +36,4 @@ const send = async (req, res) => {
     }
 }
 
-export { getList, send }
+export { getList, send, getGroupMetaData }
