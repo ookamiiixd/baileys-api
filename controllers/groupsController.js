@@ -1,4 +1,4 @@
-import { getSession, getChatList, isExists, sendMessage, formatGroup, getGroupMeta } from './../whatsapp.js'
+import { getSession, getChatList, isExists, sendMessage, formatGroup } from './../whatsapp.js'
 import response from './../response.js'
 
 const getList = (req, res) => {
@@ -7,13 +7,19 @@ const getList = (req, res) => {
 
 const getGroupMetaData = async (req, res) => {
     const session = getSession(res.locals.sessionId)
-    const jid = req.params.jid
-    let data
+    const { jid } = req.params
 
+    try {
+        const data = await session.groupMetadata(jid)
 
-    data = await getGroupMeta(session, jid)
+        if (!data.id) {
+            return response(res, 400, false, 'The group is not exists.')
+        }
 
-    response(res, 200, true, '', data)
+        response(res, 200, true, '', data)
+    } catch {
+        response(res, 500, false, 'Failed to get group metadata.')
+    }
 }
 
 const send = async (req, res) => {
@@ -36,4 +42,4 @@ const send = async (req, res) => {
     }
 }
 
-export { getList, send, getGroupMetaData }
+export { getList, getGroupMetaData, send }

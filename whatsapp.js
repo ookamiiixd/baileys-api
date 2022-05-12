@@ -183,13 +183,6 @@ const getChatList = (sessionId, isGroup = false) => {
     })
 }
 
-const getGroupMeta = async (session, jid) => {
-    let data
-    data = await session.groupMetadata(jid)
-    
-    return data
-}
-
 /**
  * @param {import('@adiwajshing/baileys').AnyWASocket} session
  */
@@ -294,5 +287,4 @@ export {
     formatGroup,
     cleanup,
     init,
-    getGroupMeta,
 }
