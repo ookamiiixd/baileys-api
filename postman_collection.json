@@ -1,9 +1,10 @@
 {
 	"info": {
 		"_postman_id": "f135a9fa-8b5c-454e-a5af-7aa9bc5790e1",
-		"name": "Baileys API v0.1",
+		"name": "Baileys API v0.2",
 		"description": "API Documentation for [https://github.com/ookamiiixd/baileys-api](https://github.com/ookamiiixd/baileys-api).",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18988925"
 	},
 	"item": [
 		{
@@ -872,26 +873,25 @@
 					]
 				},
 				{
-					"name": "Send  Text Message",
+					"name": "Send Message",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "receiver",
-									"value": "628950xxxxx",
-									"description": "The receiver phone number in format: [Country Code Without + Sign][Phone Number]. Example: 628231xxxxxx.",
-									"type": "default"
-								},
-								{
-									"key": "message",
-									"value": "Hello there!",
-									"description": "Your message.",
-									"type": "default"
+							"mode": "raw",
+							"raw": "{\r\n    \"receiver\": \"628231xxxxx\", \r\n    \"message\": {\r\n        \"text\": \"hello there!\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
 							"raw": "{{base_url}}/chats/send?id=john",
@@ -910,7 +910,7 @@
 								}
 							]
 						},
-						"description": "Send text message to a person."
+						"description": "Send message to someone."
 					},
 					"response": [
 						{
@@ -919,21 +919,13 @@
 								"method": "POST",
 								"header": [],
 								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "receiver",
-											"value": "628950xxxxx",
-											"description": "The receiver phone number in format: [Country Code Without + Sign][Phone Number]. Example: 628231xxxxxx.",
-											"type": "default"
-										},
-										{
-											"key": "message",
-											"value": "Hello there!",
-											"description": "Your message.",
-											"type": "default"
+									"mode": "raw",
+									"raw": "{\r\n    \"receiver\": \"628231xxxxx\", \r\n    \"message\": {\r\n        \"text\": \"hello there!\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
 										}
-									]
+									}
 								},
 								"url": {
 									"raw": "{{base_url}}/chats/send?id=john",
@@ -975,7 +967,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Mon, 14 Feb 2022 13:57:02 GMT"
+									"value": "Fri, 27 May 2022 14:57:19 GMT"
 								},
 								{
 									"key": "Connection",
@@ -993,23 +985,22 @@
 							"name": "Response Failed",
 							"originalRequest": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
 								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "receiver",
-											"value": "628950xxxxx",
-											"description": "The receiver phone number in format: [Country Code Without + Sign][Phone Number]. Example: 628231xxxxxx.",
-											"type": "default"
-										},
-										{
-											"key": "message",
-											"value": "Hello there!",
-											"description": "Your message.",
-											"type": "default"
+									"mode": "raw",
+									"raw": "{\r\n    \"receiver\": \"628231xxxxx\", \r\n    \"message\": {\r\n        \"text\": \"hello there!\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
 										}
-									]
+									}
 								},
 								"url": {
 									"raw": "{{base_url}}/chats/send?id=john",
@@ -1068,19 +1059,20 @@
 					]
 				},
 				{
-					"name": "Send  Bulk Text Message",
+					"name": "Send  Bulk Message",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
 								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"receiver\": \"628231xxxxx\",\r\n        \"message\": \"Hi bro, how are you?\"\r\n    },\r\n    {\r\n        \"receiver\": \"6281320xxxxx\",\r\n        \"message\": \"I'm fine, thank you.\"\r\n    }\r\n]",
+							"raw": "[\r\n    {\r\n        \"receiver\": \"628231xxxxx\", \r\n        \"message\": {\r\n            \"text\": \"hi! how are you?\"\r\n        }\r\n    },\r\n    {\r\n        \"receiver\": \"628950xxxxx\", \r\n        \"message\": {\r\n            \"text\": \"i'm fine, thank you!\"\r\n        }\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1104,7 +1096,7 @@
 								}
 							]
 						},
-						"description": "Send text message to multiple person."
+						"description": "Send message to multiple person."
 					},
 					"response": [
 						{
@@ -1115,12 +1107,13 @@
 									{
 										"key": "Content-Type",
 										"value": "application/json",
-										"type": "text"
+										"type": "text",
+										"disabled": true
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\r\n    {\r\n        \"receiver\": \"628231xxxxx\",\r\n        \"message\": \"Hi bro, how are you?\"\r\n    },\r\n    {\r\n        \"receiver\": \"6281320xxxxx\",\r\n        \"message\": \"I'm fine, thank you.\"\r\n    }\r\n]",
+									"raw": "[\r\n    {\r\n        \"receiver\": \"628231xxxxx\", \r\n        \"message\": {\r\n            \"text\": \"hi! how are you?\"\r\n        }\r\n    },\r\n    {\r\n        \"receiver\": \"628950xxxxx\", \r\n        \"message\": {\r\n            \"text\": \"i'm fine, thank you!\"\r\n        }\r\n    }\r\n]",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1159,15 +1152,15 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "96"
+									"value": "79"
 								},
 								{
 									"key": "ETag",
-									"value": "W/\"60-f/z6nvDfETHAUZOj+Wj57JGlRLo\""
+									"value": "W/\"4f-WZISsPR0zkoRx3Ch/QHgiuzvzWw\""
 								},
 								{
 									"key": "Date",
-									"value": "Mon, 14 Feb 2022 12:32:53 GMT"
+									"value": "Fri, 27 May 2022 15:19:02 GMT"
 								},
 								{
 									"key": "Connection",
@@ -1194,7 +1187,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\r\n    {\r\n        \"message\": \"Whoops, some parameters is missing!\"\r\n    },\r\n    {\r\n        \"receiver\": \"628231xxxxx\",\r\n        \"message\": \"Hi bro, how are you?\"\r\n    },\r\n    {\r\n        \"receiver\": \"6281234567890\",\r\n        \"message\": \"Looks like your phone number is not exists.\"\r\n    }\r\n]",
+									"raw": "[\r\n    {\r\n        \"message\": {\r\n            \"text\": \"Whoops, some parameters is missing!\"\r\n        }\r\n    },\r\n    {\r\n        \"receiver\": \"628231xxxxx\", \r\n        \"message\": {\r\n            \"text\": \"yay, i'm sent!\"\r\n        }\r\n    },\r\n    {\r\n        \"receiver\": \"6281234567890\",\r\n        \"message\": {\r\n            \"text\": \"Looks like your phone number is not exists.\"\r\n        }\r\n    }\r\n]",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1268,7 +1261,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\r\n    {\r\n        \"message\": \"Whoops, some parameters is missing!\"\r\n    },\r\n    {\r\n        \"receiver\": \"628231xxxxx\",\r\n    },\r\n    {\r\n        \"receiver\": \"6281234567890\",\r\n        \"message\": \"Looks like your phone number is not exists.\"\r\n    }\r\n]",
+									"raw": "[\r\n    {\r\n        \"message\": {\r\n            \"text\": \"Whoops, some parameters is missing!\"\r\n        }\r\n    },\r\n    {\r\n        \"receiver\": \"628231xxxxx\"\r\n    },\r\n    {\r\n        \"receiver\": \"6281234567890\",\r\n        \"message\": {\r\n            \"text\": \"Looks like your phone number is not exists.\"\r\n        }\r\n    }\r\n]",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1723,26 +1716,25 @@
 					]
 				},
 				{
-					"name": "Send  Text Message",
+					"name": "Send Message",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "receiver",
-									"value": "628950xxxxx-16310xxxxx",
-									"description": "The group jid. Example: 628950xxxxxx-16310xxxxx.",
-									"type": "default"
-								},
-								{
-									"key": "message",
-									"value": "Hi guys, how are you?",
-									"description": "Your message.",
-									"type": "default"
+							"mode": "raw",
+							"raw": "{\r\n    \"receiver\": \"628950xxxxx-1631xxxxx\", \r\n    \"message\": {\r\n        \"text\": \"hello guys!\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
 							"raw": "{{base_url}}/groups/send?id=john",
@@ -1761,7 +1753,7 @@
 								}
 							]
 						},
-						"description": "Send text message to a group."
+						"description": "Send message to a group."
 					},
 					"response": [
 						{
@@ -1770,21 +1762,13 @@
 								"method": "POST",
 								"header": [],
 								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "receiver",
-											"value": "628950xxxxx-16310xxxxx",
-											"description": "The group jid. Example: 628950xxxxxx-16310xxxxx.",
-											"type": "default"
-										},
-										{
-											"key": "message",
-											"value": "Hi guys, how are you?",
-											"description": "Your message.",
-											"type": "default"
+									"mode": "raw",
+									"raw": "{\r\n    \"receiver\": \"628950xxxxx-1631xxxxx\", \r\n    \"message\": {\r\n        \"text\": \"hello guys!\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
 										}
-									]
+									}
 								},
 								"url": {
 									"raw": "{{base_url}}/groups/send?id=john",
@@ -1826,7 +1810,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Mon, 14 Feb 2022 14:13:52 GMT"
+									"value": "Fri, 27 May 2022 15:04:39 GMT"
 								},
 								{
 									"key": "Connection",
@@ -1844,23 +1828,22 @@
 							"name": "Response Failed",
 							"originalRequest": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
 								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "receiver",
-											"value": "628950xxxxx-16310xxxxx",
-											"description": "The group jid. Example: 628950xxxxxx-16310xxxxx.",
-											"type": "default"
-										},
-										{
-											"key": "message",
-											"value": "Hi guys, how are you?",
-											"description": "Your message.",
-											"type": "default"
+									"mode": "raw",
+									"raw": "{\r\n    \"receiver\": \"628950xxxxx-1631xxxxx\", \r\n    \"message\": {\r\n        \"text\": \"hello guys!\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
 										}
-									]
+									}
 								},
 								"url": {
 									"raw": "{{base_url}}/groups/send?id=john",
