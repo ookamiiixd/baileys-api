@@ -33,6 +33,8 @@ RECONNECT_INTERVAL=5000
 1. You can start the app by executing `npm run start` or `node .`.
 2. Now the endpoint should be available according to your environment variable configurations. Default is at `http://localhost:8000`.
 
+Also check out the `examples` directory for the basic usage examples.
+
 ## API Docs
 
 The API documentation is available online [here](https://documenter.getpostman.com/view/18988925/UVeNni36). You can also import the **Postman Collection File** `(postman_collection.json)` into your Postman App alternatively.
@@ -47,6 +49,58 @@ The server will respond in following JSON format:
 }
 ```
 
+## Sending Message
+
+All send message endpoints is now accept a JSON body, this gives you the ability to send any kind of supported message. You can pass any kind supported message into the `message` property.
+
+Here's some examples:
+
+```javascript
+// Send text message
+{
+    receiver: '628231xxxxx',
+    message: {
+        text: 'Hello there!'
+    }
+}
+
+// Send image
+{
+    receiver: '628231xxxxx',
+    message: {
+        image: {
+            url: 'https://example.com/logo.png'
+        },
+        caption: 'My logo'
+    }
+}
+
+// Send video
+{
+    receiver: '628231xxxxx',
+    message: {
+        video: {
+            url: 'https://example.com/intro.mp4'
+        },
+        caption: 'My intro'
+    }
+}
+
+// Send document
+{
+    receiver: '628231xxxxx',
+    message: {
+        document: {
+            url: 'https://example.com/presentation.pdf'
+        },
+        mimetype: 'application/pdf',
+        fileName: 'presentation-1.pdf'
+    }
+}
+```
+
+For more examples, check out Baileys's docs [here](https://github.com/adiwajshing/Baileys#sending-messages).
+
 ## Known Issue
 
 -   ~~Logging out from your phone manually when the session is still active **will kill the entire app** after a few minutes. As for now you should only destroy a session by using the **delete session endpoint** to avoid this issue. This issue only occurs for **Beta Multi-Device** users~~. This issue should be solved on Baileys version **4.1.0** (Tested).
@@ -54,6 +108,7 @@ The server will respond in following JSON format:
 ## Notes
 
 -   The app only provide a very simple validation, you may want to implement your own.
+-   When sending message, your `message` property will not be validated, so make sure you sent the right data!
 -   There's no authentication, you may want to implement your own.
 -   The **Beta Multi-Device** client use provided Baileys's `makeInMemoryStore` method which will store your data in memory and a json file, you may want to use a better data management.
 -   Automatically reading incoming messages is now disabled by default. Uncomment `whatsapp.js:91-105` to enable this behaviour.
