@@ -17,7 +17,7 @@ const send = async (req, res) => {
             return response(res, 400, false, 'The receiver number is not exists.')
         }
 
-        await sendMessage(session, receiver, { text: message })
+        await sendMessage(session, receiver, message)
 
         response(res, 200, true, 'The message has been successfully sent.')
     } catch {
@@ -47,7 +47,7 @@ const sendBulk = async (req, res) => {
                 continue
             }
 
-            await sendMessage(session, data.receiver, { text: data.message })
+            await sendMessage(session, data.receiver, data.message)
         } catch {
             errors.push(key)
         }
