@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use('/', routes)
 
-app.listen(port, host, () => {
+app.listen(port, () => {
     init()
     console.log(`Server is listening on http://${host}:${port}`)
 })
