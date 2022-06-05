@@ -3,11 +3,13 @@ import express from 'express'
 import nodeCleanup from 'node-cleanup'
 import routes from './routes.js'
 import { init, cleanup } from './whatsapp.js'
+import cors from  cors
 
 const app = express()
 const host = process.env.HOST ?? '127.0.0.1'
 const port = parseInt(process.env.PORT ?? 3333)
 
+app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use('/', routes)
