@@ -1072,7 +1072,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"receiver\": \"628231xxxxx\", \r\n        \"message\": {\r\n            \"text\": \"hi! how are you?\"\r\n        }\r\n    },\r\n    {\r\n        \"receiver\": \"628950xxxxx\", \r\n        \"message\": {\r\n            \"text\": \"i'm fine, thank you!\"\r\n        }\r\n    }\r\n]",
+							"raw": "[\r\n    {\r\n        \"receiver\": \"628231xxxxx\", \r\n        \"message\": {\r\n            \"text\": \"hi! how are you?\"\r\n        }\r\n    },\r\n    {\r\n        \"receiver\": \"628950xxxxx\",\r\n        \"delay\": 60000, \r\n        \"message\": {\r\n            \"text\": \"i'm fine, thank you!\"\r\n        }\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1096,7 +1096,7 @@
 								}
 							]
 						},
-						"description": "Send message to multiple person."
+						"description": "Send message to multiple person.\n\nYou can also set custom `delay` between each message by adding the delay (in milliseconds) to the `delay` properties. Default value is `1000` if you don't provide any delay or you provide an invalid delay.\n\nExample:\n\n``` javascript\n[\n  {\n    \"receiver\": \"628231xxxxx\",\n    // 1000ms / 1 seconds delay before it try to send the message since we don't provide any delay\n    \"message\": {\n      \"text\": \"hi! how are you?\"\n    }\n  },\n  {\n    \"receiver\": \"628950xxxxx\",\n    \"delay\": 60000, // 1 minutes delay before it try to send the message\n    \"message\": {\n      \"text\": \"i'm fine, thank you!\"\n    }\n  }\n]\n\n```"
 					},
 					"response": [
 						{
@@ -1113,7 +1113,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\r\n    {\r\n        \"receiver\": \"628231xxxxx\", \r\n        \"message\": {\r\n            \"text\": \"hi! how are you?\"\r\n        }\r\n    },\r\n    {\r\n        \"receiver\": \"628950xxxxx\", \r\n        \"message\": {\r\n            \"text\": \"i'm fine, thank you!\"\r\n        }\r\n    }\r\n]",
+									"raw": "[\r\n    {\r\n        \"receiver\": \"628231xxxxx\", \r\n        \"message\": {\r\n            \"text\": \"hi! how are you?\"\r\n        }\r\n    },\r\n    {\r\n        \"receiver\": \"628950xxxxx\",\r\n        \"delay\": 60000, \r\n        \"message\": {\r\n            \"text\": \"i'm fine, thank you!\"\r\n        }\r\n    }\r\n]",
 									"options": {
 										"raw": {
 											"language": "json"
