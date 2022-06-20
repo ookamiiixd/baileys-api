@@ -28,7 +28,8 @@
     "node-cleanup": "^2.1.2",
     "pino": "^7.10.0",
     "qrcode": "^1.5.0",
-    "qrcode-terminal": "^0.12.0"
+    "qrcode-terminal": "^0.12.0",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "eslint": "^8.5.0",
