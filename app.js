@@ -3,7 +3,7 @@ import express from 'express'
 import nodeCleanup from 'node-cleanup'
 import routes from './routes.js'
 import { init, cleanup } from './whatsapp.js'
-var cors = require("cors")
+import cors from 'cors'
 
 const app = express()
 app.use(cors())
