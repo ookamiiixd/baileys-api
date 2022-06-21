@@ -46,7 +46,7 @@ const shouldReconnect = (sessionId) => {
 const createSession = async (sessionId, isLegacy = false, res = null) => {
     const sessionFile = (isLegacy ? 'legacy_' : 'md_') + sessionId + (isLegacy ? '.json' : '')
 
-    const logger = pino({ level: 'debug' })
+    const logger = pino({ level: 'warn' })
     const store = makeInMemoryStore({ logger })
 
     let state, saveState
@@ -164,14 +164,6 @@ const deleteSession = (sessionId, isLegacy = false) => {
     const storeFile = `${sessionId}_store.json`
     const rmOptions = { force: true, recursive: true }
 
-    // If (isSessionFileExists(sessionFile)) {
-    //     unlinkSync(sessionsDir(sessionFile))
-    // }
-
-    // if (isSessionFileExists(storeFile)) {
-    //     unlinkSync(sessionsDir(storeFile))
-    // }
-
     rmSync(sessionsDir(sessionFile), rmOptions)
     rmSync(sessionsDir(storeFile), rmOptions)
 
@@ -262,11 +254,7 @@ const init = () => {
         }
 
         for (const file of files) {
-            if (
-                // !file.endsWith('.json') ||
-                (!file.startsWith('md_') && !file.startsWith('legacy_')) ||
-                file.endsWith('_store')
-            ) {
+            if ((!file.startsWith('md_') && !file.startsWith('legacy_')) || file.endsWith('_store')) {
                 continue
             }
 
