@@ -15,18 +15,16 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use('/', routes)
 
-if(host){
-    app.listen(port, host, () => {
+const listenerCallback = () => {
     init()
-    console.log(`Server is listening on http://${host}:${port}`)
-})
-}else{
-app.listen(port, () => {
-    init()
-    console.log(`Server is listening on http://localhost:${port}`)
-})
+    console.log(`Server is listening on http://${host ? host : 'localhost'}:${port}`)
 }
 
+if (host) {
+    app.listen(port, host, listenerCallback)
+} else {
+    app.listen(port, listenerCallback)
+}
 
 nodeCleanup(cleanup)
 
