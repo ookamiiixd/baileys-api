@@ -3,7 +3,6 @@ const SESSION_ID = 'john'
 
 const sendMessage = async (endpoint, data) => {
     // Here we are using fetch API to send the request
-    // eslint-disable-next-line no-undef
     const response = await fetch(`${BASE_URI}${endpoint}?id=${SESSION_ID}`, {
         method: 'POST',
         body: JSON.stringify(data),

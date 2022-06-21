@@ -3,7 +3,6 @@ const SESSION_ID = 'john'
 
 const sendRequest = async () => {
     // Here we are using fetch API to send the request
-    // eslint-disable-next-line no-undef
     const response = await fetch(`${BASE_URI}sessions/add`, {
         method: 'POST',
         body: JSON.stringify({
