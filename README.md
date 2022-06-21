@@ -103,7 +103,7 @@ For more examples, check out Baileys's docs [here](https://github.com/adiwajshin
 
 ## Known Issue
 
--   ~~Logging out from your phone manually when the session is still active **will kill the entire app** after a few minutes. As for now you should only destroy a session by using the **delete session endpoint** to avoid this issue. This issue only occurs for **Beta Multi-Device** users~~. This issue should be solved on Baileys version **4.1.0** (Tested).
+Currently there's no known issues. If you find any, please kindly open a new one.
 
 ## Notes
 
