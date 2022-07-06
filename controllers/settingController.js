@@ -29,4 +29,23 @@ const pp_Url = async (req, res) => {
     }
 }
 
-export { pp_Url }
+const checkPhone = async (req, res) => {
+    const session = getSession(res.locals.sessionId)
+
+    const { phone } = req.params
+    const phn_no = formatPhone(phone)
+
+
+    const exists = await isExists(session, phn_no)
+
+    if (!exists) {
+        return response(res, 400, false, 'The whatsapp number is not exists.')
+    } else {
+        response(res, 200, true, 'Number found')
+    }
+}
+
+export { 
+    pp_Url,
+    checkPhone,
+ }
