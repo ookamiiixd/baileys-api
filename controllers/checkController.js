@@ -1,5 +1,5 @@
-import { getSession, formatPhone ,isExists , ppUrl } from './../whatsapp.js'
-import response from './../response.js'
+import { getSession, formatPhone ,isExists , ppUrl } from '../whatsapp.js'
+import response from '../response.js'
 
 const pp_Url = async (req, res) => {
     const session = getSession(res.locals.sessionId)
