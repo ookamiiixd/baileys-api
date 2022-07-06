@@ -216,6 +216,22 @@ const sendMessage = async (session, receiver, message, delayMs = 1000) => {
         return Promise.reject(null) // eslint-disable-line prefer-promise-reject-errors
     }
 }
+//Added By KingRao
+/**
+ * @param {import('@adiwajshing/baileys').AnyWASocket} session
+ */
+
+ //const ppUrl = await sock.profilePictureUrl("xyz@g.us", 'image')
+ const ppUrl = async (session, phn_no) => {
+
+    try {
+        return await session.profilePictureUrl(phn_no, 'image')
+    } catch {
+        return false // eslint-disable-line prefer-promise-reject-errors
+    }
+}
+
+
 
 const formatPhone = (phone) => {
     if (phone.endsWith('@s.whatsapp.net')) {
@@ -275,6 +291,7 @@ export {
     getChatList,
     isExists,
     sendMessage,
+    ppUrl,
     formatPhone,
     formatGroup,
     cleanup,

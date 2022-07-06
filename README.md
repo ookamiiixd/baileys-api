@@ -49,6 +49,34 @@ The server will respond in following JSON format:
 }
 ```
 
+## Profile URL Get
+
+http://127.0.0.1:8000/check/photo/{sessionID}/{phoneNumber}
+
+```javascript
+
+{
+	success: true|false, // bool
+	message: "" | "Account Image not set", // string
+	data: { img : "URL"} | {} // string
+}
+
+```
+
+## WA Number Check
+
+http://127.0.0.1:8000/check/number/{sessionID}/{phoneNumber}
+
+```javascript
+
+{
+	success: true|false, // bool
+	message: "Number found" | "The whatsapp number is not exists.", // string
+	data: {} // string
+}
+
+```
+
 ## Sending Message
 
 All send message endpoints is now accept a JSON body, this gives you the ability to send any kind of supported message. You can pass any kind supported message into the `message` property.
