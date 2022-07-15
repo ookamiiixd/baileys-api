@@ -1,4 +1,4 @@
-import { rmSync, readdir } from 'fs'
+import { rmSync, readdir, readdirSync } from 'fs'
 import { join } from 'path'
 import pino from 'pino'
 import makeWASocket, {
@@ -267,6 +267,19 @@ const init = () => {
     })
 }
 
+const getAllSession = () => {
+    const directoriesInDIrectory = readdirSync(sessionsDir(), { withFileTypes: true })
+        .filter((item) => item.isDirectory())
+        .map(function (item) {
+            const isLegacy = item.name.split('_', 1)[0] !== 'md'
+            return {
+                name: item.name.substring(isLegacy ? 7 : 3),
+                isLegacy: isLegacy,
+            }
+        })
+    return directoriesInDIrectory
+}
+
 export {
     isSessionExists,
     createSession,
@@ -279,4 +292,5 @@ export {
     formatGroup,
     cleanup,
     init,
+    getAllSession,
 }
