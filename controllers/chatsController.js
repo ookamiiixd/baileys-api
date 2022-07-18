@@ -1,5 +1,6 @@
-import { getSession, getChatList, isExists, sendMessage, formatPhone } from './../whatsapp.js'
+import { getSession, getChatList, isExists, sendMessage, formatPhone, messageMedia } from './../whatsapp.js'
 import response from './../response.js'
+import { isMedia } from '../helpers.js'
 
 const getList = (req, res) => {
     return response(res, 200, true, '', getChatList(res.locals.sessionId))
@@ -8,13 +9,17 @@ const getList = (req, res) => {
 const send = async (req, res) => {
     const session = getSession(res.locals.sessionId)
     const receiver = formatPhone(req.body.receiver)
-    const { message } = req.body
+    let { message } = req.body
 
     try {
         const exists = await isExists(session, receiver)
 
         if (!exists) {
             return response(res, 400, false, 'The receiver number is not exists.')
+        }
+
+        if (isMedia(message)) {
+            message = await messageMedia('base64', message)
         }
 
         await sendMessage(session, receiver, message, 0)
