@@ -1,4 +1,4 @@
-import { rmSync, readdir } from 'fs'
+import { rmSync, readdir, readdirSync } from 'fs'
 import { join } from 'path'
 import pino from 'pino'
 import makeWASocket, {
@@ -13,6 +13,7 @@ import makeWASocket, {
 import { toDataURL } from 'qrcode'
 import __dirname from './dirname.js'
 import response from './response.js'
+import { isBase64, keyExists } from './helpers.js'
 
 const sessions = new Map()
 const retries = new Map()
@@ -217,6 +218,31 @@ const sendMessage = async (session, receiver, message, delayMs = 1000) => {
     }
 }
 
+/**
+ * new method for send media
+ * @param {*} method base64 | video | document
+ * @param {*} message object message
+ */
+const messageMedia = async (method, message) => {
+    const methods = {
+        base64: await messageMediaImage(message),
+    }
+    return keyExists(method, methods)
+}
+
+const messageMediaImage = async (message) => {
+    if (!isBase64(message.image)) {
+        throw 'base64 not detected'
+    }
+
+    const buffer = Buffer.from(message.image, 'base64')
+
+    return {
+        image: buffer,
+        caption: message.caption,
+    }
+}
+
 const formatPhone = (phone) => {
     if (phone.endsWith('@s.whatsapp.net')) {
         return phone
@@ -267,6 +293,19 @@ const init = () => {
     })
 }
 
+const getAllSession = () => {
+    const directoriesInDIrectory = readdirSync(sessionsDir(), { withFileTypes: true })
+        .filter((item) => item.isDirectory())
+        .map(function (item) {
+            const isLegacy = item.name.split('_', 1)[0] !== 'md'
+            return {
+                name: item.name.substring(isLegacy ? 7 : 3),
+                isLegacy: isLegacy,
+            }
+        })
+    return directoriesInDIrectory
+}
+
 export {
     isSessionExists,
     createSession,
@@ -279,4 +318,6 @@ export {
     formatGroup,
     cleanup,
     init,
+    getAllSession,
+    messageMedia,
 }
