@@ -29,7 +29,7 @@ const sendBulk = async (req, res) => {
     const session = getSession(res.locals.sessionId)
     const errors = []
 
-    for (const [key, data] of req.body.entries()) {
+    for (const [key, data] of Object.entries(req.body)) {
         let { receiver, message, delay } = data
 
         if (!receiver || !message) {
