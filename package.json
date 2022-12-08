@@ -1,12 +1,9 @@
 {
   "name": "baileys-api",
   "description": "Simple RESTful WhatsApp API",
+  "version": "1.0.0-beta.0",
   "private": true,
-  "main": "app.js",
-  "type": "module",
-  "scripts": {
-    "start": "node ."
-  },
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ookamiiixd/baileys-api.git"
@@ -16,26 +13,41 @@
     "url": "https://github.com/ookamiiixd/baileys-api/issues"
   },
   "homepage": "https://github.com/ookamiiixd/baileys-api#readme",
-  "engines": {
-    "node": ">=14.5.0"
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier . --write"
   },
   "dependencies": {
-    "@adiwajshing/baileys": "^4.2.0",
-    "@adiwajshing/keyed-db": "^0.2.4",
-    "dotenv": "^16.0.0",
-    "express": "^4.17.2",
-    "express-validator": "^6.14.0",
-    "node-cleanup": "^2.1.2",
-    "pino": "^7.10.0",
-    "qrcode": "^1.5.0",
+    "@adiwajshing/baileys": "https://github.com/ookamiiixd/Baileys.git#build",
+    "@hapi/boom": "^10.0.0",
+    "@prisma/client": "^4.7.1",
+    "baileys-store": "file:external/baileys-store-1.tgz",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^6.14.2",
+    "link-preview-js": "^3.0.4",
+    "pino": "^8.7.0",
+    "qrcode": "^1.5.1",
     "qrcode-terminal": "^0.12.0",
-    "cors": "^2.8.5"
+    "sharp": "^0.31.2"
   },
   "devDependencies": {
-    "eslint": "^8.5.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-xo": "^0.39.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.5.1"
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.14",
+    "@types/node": "^18.11.10",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint": "^8.29.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.8.0",
+    "prisma": "^4.7.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.3"
+  },
+  "engines": {
+    "node": ">=14.5.0"
   }
 }
