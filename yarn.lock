@@ -485,9 +485,9 @@ axios@^0.24.0:
   dependencies:
     follow-redirects "^1.14.4"
 
-"baileys-store@file:external/baileys-store-1.tgz":
+"baileys-store@file:external/baileys-store-2.tgz":
   version "1.0.0-beta.0"
-  resolved "file:external/baileys-store-1.tgz#5bfde28f4cda8f1de564ae61caf65edba9c1e7d2"
+  resolved "file:external/baileys-store-2.tgz#e95444754b317306639353b847aff5e1386fe81a"
   dependencies:
     tiny-invariant "^1.3.1"
 

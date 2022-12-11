@@ -21,9 +21,9 @@
   },
   "dependencies": {
     "@adiwajshing/baileys": "https://github.com/ookamiiixd/Baileys.git#build",
+    "baileys-store": "file:external/baileys-store-2.tgz",
     "@hapi/boom": "^10.0.0",
     "@prisma/client": "^4.7.1",
-    "baileys-store": "file:external/baileys-store-1.tgz",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
