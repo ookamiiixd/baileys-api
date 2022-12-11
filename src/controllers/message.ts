@@ -64,12 +64,10 @@ export const list: RequestHandler = async (req, res) => {
       where: { sessionId },
     });
 
-    res
-      .status(200)
-      .json({
-        data: messages,
-        cursor: messages.length ? messages[messages.length - 1].pkId : null,
-      });
+    res.status(200).json({
+      data: messages,
+      cursor: messages.length ? messages[messages.length - 1].pkId : null,
+    });
   } catch (e) {
     const message = 'An error occured during message list';
     logger.error(e, message);
