@@ -1,3 +1,4 @@
+import { serializePrisma } from 'baileys-store';
 import type { RequestHandler } from 'express';
 import { logger, prisma } from '../shared';
 
@@ -5,11 +6,14 @@ export const list: RequestHandler = async (req, res) => {
   try {
     const { sessionId } = req.params;
     const { cursor = undefined, limit = 25 } = req.query;
-    const chats = await prisma.chat.findMany({
-      cursor: cursor ? { sessionId_id: { id: cursor as string, sessionId } } : undefined,
-      take: Number(limit),
-      skip: cursor ? 1 : 0,
-    });
+    const chats = (
+      await prisma.chat.findMany({
+        cursor: cursor ? { sessionId_id: { id: cursor as string, sessionId } } : undefined,
+        take: Number(limit),
+        skip: cursor ? 1 : 0,
+        where: { sessionId },
+      })
+    ).map((c) => serializePrisma(c));
 
     res.status(200).json({ data: chats, cursor: chats.length ? chats[chats.length - 1].id : null });
   } catch (e) {

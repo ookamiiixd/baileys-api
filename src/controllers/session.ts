@@ -1,6 +1,5 @@
 import type { RequestHandler } from 'express';
 import type { WebSocket } from 'ws';
-import { logger } from '../shared';
 import { createSession, getSession, sessionExists } from '../wa';
 
 export const find: RequestHandler = (req, res) =>
@@ -17,14 +16,7 @@ export const status: RequestHandler = (req, res) => {
 export const add: RequestHandler = async (req, res) => {
   const { sessionId, ...options } = req.body;
   if (sessionExists(sessionId)) return res.status(400).json({ error: 'Session already exists' });
-
-  try {
-    await createSession({ sessionId, res, socketConfig: options });
-  } catch (e) {
-    const message = 'An error occured during session create';
-    logger.error(e, message);
-    res.status(500).json({ error: message });
-  }
+  createSession({ sessionId, res, socketConfig: options });
 };
 
 export const addSSE: RequestHandler = async (req, res) => {
@@ -40,15 +32,7 @@ export const addSSE: RequestHandler = async (req, res) => {
     res.end();
     return;
   }
-
-  try {
-    await createSession({ sessionId, res, SSE: true });
-  } catch (e) {
-    const message = 'An error occured during session create';
-    logger.error(e, message);
-    res.write(`data: ${JSON.stringify({ error: message })}\n\n`);
-    res.end();
-  }
+  createSession({ sessionId, res, SSE: true });
 };
 
 export const del: RequestHandler = async (req, res) => {

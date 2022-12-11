@@ -1,24 +1,21 @@
 import { Router } from 'express';
 import { list } from '../controllers/group';
 import { find } from '../controllers/message';
-import sessionValidator from '../middlewares/session-validator';
 import requestValidator from '../middlewares/request-validator';
 import { query } from 'express-validator';
 
-const router = Router();
+const router = Router({ mergeParams: true });
 router.get(
   '/',
-  sessionValidator,
-  query('cursor').isString(),
-  query('limit').isNumeric(),
+  query('cursor').isString().optional(),
+  query('limit').isNumeric().optional(),
   requestValidator,
   list
 );
 router.get(
   '/:jid',
-  sessionValidator,
-  query('cursor').isString(),
-  query('limit').isNumeric(),
+  query('cursor').isString().optional(),
+  query('limit').isNumeric().optional(),
   requestValidator,
   find
 );

@@ -2,6 +2,7 @@ import type { RequestHandler } from 'express';
 import { delay as delayMs } from '@adiwajshing/baileys';
 import { logger, prisma } from '../shared';
 import { getSession, jidExists } from '../wa';
+import { serializePrisma } from 'baileys-store';
 
 export const send: RequestHandler = async (req, res) => {
   try {
@@ -57,12 +58,14 @@ export const list: RequestHandler = async (req, res) => {
   try {
     const { sessionId } = req.params;
     const { cursor = undefined, limit = 25 } = req.query;
-    const messages = await prisma.message.findMany({
-      cursor: cursor ? { pkId: Number(cursor) } : undefined,
-      take: Number(limit),
-      skip: cursor ? 1 : 0,
-      where: { sessionId },
-    });
+    const messages = (
+      await prisma.message.findMany({
+        cursor: cursor ? { pkId: Number(cursor) } : undefined,
+        take: Number(limit),
+        skip: cursor ? 1 : 0,
+        where: { sessionId },
+      })
+    ).map((m) => serializePrisma(m));
 
     res.status(200).json({
       data: messages,
@@ -79,14 +82,17 @@ export const find: RequestHandler = async (req, res) => {
   try {
     const { sessionId, jid } = req.params;
     const { cursor = undefined, limit = 25 } = req.query;
-    const messages = await prisma.message.findMany({
-      cursor: cursor
-        ? { sessionId_remoteJid_id: { id: cursor as string, remoteJid: jid, sessionId } }
-        : undefined,
-      take: Number(limit),
-      skip: cursor ? 1 : 0,
-      orderBy: { messageTimestamp: 'desc' },
-    });
+    const messages = (
+      await prisma.message.findMany({
+        cursor: cursor
+          ? { sessionId_remoteJid_id: { id: cursor as string, remoteJid: jid, sessionId } }
+          : undefined,
+        take: Number(limit),
+        skip: cursor ? 1 : 0,
+        where: { sessionId },
+        orderBy: { messageTimestamp: 'desc' },
+      })
+    ).map((m) => serializePrisma(m));
 
     res
       .status(200)
