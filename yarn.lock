@@ -4,7 +4,7 @@
 
 "@adiwajshing/baileys@https://github.com/ookamiiixd/Baileys.git#build":
   version "5.0.0"
-  resolved "https://github.com/ookamiiixd/Baileys.git#ebd001545203f1d3fd008f7406c44888acc19d64"
+  resolved "https://github.com/ookamiiixd/Baileys.git#edd03183e389a2ec9fc28323ebdf95fd0daf9f85"
   dependencies:
     "@hapi/boom" "^9.1.3"
     axios "^0.24.0"
