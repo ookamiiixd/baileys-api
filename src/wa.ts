@@ -1,4 +1,4 @@
-import type { ConnectionState, proto, SocketConfig, WASocket } from '@adiwajshing/baileys';
+import type { ConnectionState, SocketConfig, WASocket } from '@adiwajshing/baileys';
 import makeWASocket, { DisconnectReason, Browsers } from '@adiwajshing/baileys';
 import type { Response } from 'express';
 import { useSession, Store, initStore } from 'baileys-store';
@@ -6,7 +6,12 @@ import type { Boom } from '@hapi/boom';
 import { toDataURL } from 'qrcode';
 import { prisma, logger } from './shared';
 
-const sessions = new Map<string, WASocket & { destroy: () => Promise<void>; store: Store }>();
+type Session = WASocket & {
+  destroy: () => Promise<void>;
+  store: Store;
+};
+
+const sessions = new Map<string, Session>();
 const retries = new Map<string, number>();
 const SSEQRGenerations = new Map<string, number>();
 
@@ -19,7 +24,7 @@ export async function init() {
   initStore({ prisma, logger });
   const sessions = await prisma.session.findMany({
     select: { sessionId: true, data: true },
-    where: { id: { contains: SESSION_CONFIG_ID } },
+    where: { id: { startsWith: SESSION_CONFIG_ID } },
   });
 
   for (const { sessionId, data } of sessions) {
@@ -42,14 +47,14 @@ function shouldReconnect(sessionId: string) {
   return false;
 }
 
-type WASessionOptions = {
+type createSessionOptions = {
   sessionId: string;
   res?: Response;
   SSE?: boolean;
   socketConfig?: SocketConfig;
 };
 
-export async function createSession(options: WASessionOptions) {
+export async function createSession(options: createSessionOptions) {
   const { sessionId, res, SSE, socketConfig } = options;
   let connectionState: Partial<ConnectionState> = { connection: 'close' };
 
@@ -101,16 +106,16 @@ export async function createSession(options: WASessionOptions) {
 
   const { state, saveCreds } = await useSession(sessionId);
   const socket = makeWASocket({
-    auth: state,
-    logger,
     printQRInTerminal: true,
     browser: Browsers.ubuntu('Chrome'),
     ...socketConfig,
+    auth: state,
+    logger,
     getMessage: async (key) => {
       const data = await prisma.message.findFirst({
         where: { remoteJid: key.remoteJid!, id: key.id!, sessionId },
       });
-      return (data || undefined) as proto.IMessage | undefined;
+      return (data || undefined) as any;
     },
   });
 
@@ -149,4 +154,22 @@ export async function deleteSession(sessionId: string) {
 
 export function sessionExists(sessionId: string) {
   return sessions.has(sessionId);
+}
+
+export async function jidExists(
+  session: Session,
+  jid: string,
+  type: 'group' | 'number' = 'number'
+) {
+  try {
+    if (type === 'number') {
+      const [result] = await session.onWhatsApp(jid);
+      return result.exists;
+    }
+
+    const groupMeta = await session.groupMetadata(jid);
+    return !!groupMeta.id;
+  } catch (e) {
+    return Promise.reject(e);
+  }
 }
