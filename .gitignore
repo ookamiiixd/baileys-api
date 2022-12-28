@@ -1,1 +1,12 @@
-node_modules/
+# NODE
+node_modules
+package-lock.json
+yarn.lock
+
+# APPLICATION
+.env
+sessiondata
+
+# IDEs
+.vscode/settings.json
+.idea
