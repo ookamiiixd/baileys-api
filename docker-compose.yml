@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  api:
+    image: ilzam/baileys-api:1.0.0
+    container_name: "api"
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
