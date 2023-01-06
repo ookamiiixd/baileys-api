@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { query } from 'express-validator';
-import * as controller from '../controllers/group';
+import { body, query } from 'express-validator';
+import * as controller from '../controllers/contact';
 import requestValidator from '../middlewares/request-validator';
 import sessionValidator from '../middlewares/session-validator';
 
@@ -12,7 +12,16 @@ router.get(
   requestValidator,
   controller.list
 );
-router.get('/:jid', sessionValidator, controller.find);
+router.get('/blocklist', sessionValidator, controller.listBlocked);
+router.post(
+  '/blocklist/update',
+  body('jid').isString().notEmpty(),
+  body('action').isString().isIn(['block', 'unblock']).optional(),
+  requestValidator,
+  sessionValidator,
+  controller.updateBlock
+);
+router.get('/:jid', sessionValidator, controller.check);
 router.get('/:jid/photo', sessionValidator, controller.photo);
 
 export default router;

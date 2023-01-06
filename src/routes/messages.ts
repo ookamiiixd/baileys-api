@@ -2,11 +2,12 @@ import { Router } from 'express';
 import { body, query } from 'express-validator';
 import * as controller from '../controllers/message';
 import requestValidator from '../middlewares/request-validator';
+import sessionValidator from '../middlewares/session-validator';
 
 const router = Router({ mergeParams: true });
 router.get(
   '/',
-  query('cursor').isString().optional(),
+  query('cursor').isNumeric().optional(),
   query('limit').isNumeric().optional(),
   requestValidator,
   controller.list
@@ -18,8 +19,15 @@ router.post(
   body('message').isObject().notEmpty(),
   body('options').isObject().optional(),
   requestValidator,
+  sessionValidator,
   controller.send
 );
-router.post('/send-bulk', body().isArray().notEmpty(), requestValidator, controller.sendBulk);
+router.post(
+  '/send/bulk',
+  body().isArray().notEmpty(),
+  requestValidator,
+  sessionValidator,
+  controller.sendBulk
+);
 
 export default router;

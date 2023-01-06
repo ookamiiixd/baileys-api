@@ -1,12 +1,17 @@
-// import { join } from 'path';
-// import { writeFile } from 'fs/promises';
-import type { ConnectionState, SocketConfig, WASocket } from '@adiwajshing/baileys';
-import makeWASocket, { DisconnectReason, Browsers } from '@adiwajshing/baileys';
-import type { Response } from 'express';
-import { useSession, Store, initStore } from 'baileys-store';
+import type { ConnectionState, proto, SocketConfig, WASocket } from '@adiwajshing/baileys';
+import makeWASocket, {
+  Browsers,
+  DisconnectReason,
+  isJidBroadcast,
+  makeCacheableSignalKeyStore,
+} from '@adiwajshing/baileys';
 import type { Boom } from '@hapi/boom';
+import { initStore, Store, useSession } from '@ookamiiixd/baileys-store';
+import type { Response } from 'express';
+// import { writeFile } from 'fs/promises';
+// import { join } from 'path';
 import { toDataURL } from 'qrcode';
-import { prisma, logger } from './shared';
+import { logger, prisma } from './shared';
 
 type Session = WASocket & {
   destroy: () => Promise<void>;
@@ -30,11 +35,7 @@ export async function init() {
   });
 
   for (const { sessionId, data } of sessions) {
-    try {
-      await createSession({ sessionId, socketConfig: JSON.parse(data) });
-    } catch (e) {
-      logger.error(e, 'An error occured during session create from init');
-    }
+    createSession({ sessionId, socketConfig: JSON.parse(data) });
   }
 }
 
@@ -61,10 +62,10 @@ export async function createSession(options: createSessionOptions) {
   const configID = `${SESSION_CONFIG_ID}-${sessionId}`;
   let connectionState: Partial<ConnectionState> = { connection: 'close' };
 
-  const destroy = async () => {
+  const destroy = async (logout = true) => {
     try {
       await Promise.all([
-        socket.logout(),
+        logout && socket.logout(),
         prisma.chat.deleteMany({ where: { sessionId } }),
         prisma.contact.deleteMany({ where: { sessionId } }),
         prisma.message.deleteMany({ where: { sessionId } }),
@@ -85,15 +86,16 @@ export async function createSession(options: createSessionOptions) {
 
     if (code === DisconnectReason.loggedOut || doNotReconnect) {
       if (res) {
-        !SSE && res.status(500).json({ error: 'Unable to create session' });
+        !SSE && !res.headersSent && res.status(500).json({ error: 'Unable to create session' });
         res.end();
       }
-      doNotReconnect && destroy();
-      sessions.delete(sessionId);
+      destroy(doNotReconnect);
       return;
     }
-    !restartRequired &&
+
+    if (!restartRequired) {
       logger.info({ attempts: retries.get(sessionId) ?? 1, sessionId }, 'Reconnecting...');
+    }
     setTimeout(() => createSession(options), restartRequired ? 0 : RECONNECT_INTERVAL);
   };
 
@@ -102,7 +104,8 @@ export async function createSession(options: createSessionOptions) {
       if (res && !res.headersSent) {
         try {
           const qr = await toDataURL(connectionState.qr);
-          return res.status(200).json({ qr });
+          res.status(200).json({ qr });
+          return;
         } catch (e) {
           logger.error(e, 'An error occured during QR generation');
           res.status(500).json({ error: 'Unable to generate QR' });
@@ -114,7 +117,7 @@ export async function createSession(options: createSessionOptions) {
 
   const handleSSEConnectionUpdate = async () => {
     let qr: string | undefined = undefined;
-    if (connectionState.qr) {
+    if (connectionState.qr?.length) {
       try {
         qr = await toDataURL(connectionState.qr);
       } catch (e) {
@@ -123,8 +126,8 @@ export async function createSession(options: createSessionOptions) {
     }
 
     const currentGenerations = SSEQRGenerations.get(sessionId) ?? 0;
-    if (!res || (qr && currentGenerations >= SSE_MAX_QR_GENERATION)) {
-      res && res.end();
+    if (!res || res.writableEnded || (qr && currentGenerations >= SSE_MAX_QR_GENERATION)) {
+      res && !res.writableEnded && res.end();
       destroy();
       return;
     }
@@ -139,21 +142,25 @@ export async function createSession(options: createSessionOptions) {
   const socket = makeWASocket({
     printQRInTerminal: true,
     browser: Browsers.ubuntu('Chrome'),
+    generateHighQualityLinkPreview: true,
     ...socketConfig,
-    auth: state,
+    auth: {
+      creds: state.creds,
+      keys: makeCacheableSignalKeyStore(state.keys, logger),
+    },
     logger,
+    shouldIgnoreJid: (jid) => isJidBroadcast(jid),
     getMessage: async (key) => {
       const data = await prisma.message.findFirst({
         where: { remoteJid: key.remoteJid!, id: key.id!, sessionId },
       });
-      return (data || undefined) as any;
+      return (data?.message || undefined) as proto.IMessage | undefined;
     },
   });
 
   const store = new Store(sessionId, socket.ev);
   sessions.set(sessionId, { ...socket, destroy, store });
 
-  SSE && res?.on('close', () => res.end());
   socket.ev.on('creds.update', saveCreds);
   socket.ev.on('connection.update', (update) => {
     connectionState = update;
@@ -167,6 +174,7 @@ export async function createSession(options: createSessionOptions) {
     handleConnectionUpdate();
   });
 
+  // Debug events
   // socket.ev.on('messaging-history.set', (data) => dump('messaging-history.set', data));
   // socket.ev.on('chats.upsert', (data) => dump('chats.upsert', data));
   // socket.ev.on('contacts.update', (data) => dump('contacts.update', data));
@@ -184,7 +192,7 @@ export function getSession(sessionId: string) {
 }
 
 export async function deleteSession(sessionId: string) {
-  return sessions.get(sessionId)?.destroy();
+  sessions.get(sessionId)?.destroy();
 }
 
 export function sessionExists(sessionId: string) {
@@ -199,7 +207,7 @@ export async function jidExists(
   try {
     if (type === 'number') {
       const [result] = await session.onWhatsApp(jid);
-      return result.exists;
+      return !!result?.exists;
     }
 
     const groupMeta = await session.groupMetadata(jid);
@@ -209,6 +217,7 @@ export async function jidExists(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 // export async function dump(fileName: string, data: any) {
 //   const path = join(__dirname, '..', 'debug', `${fileName}.json`);
 //   await writeFile(path, JSON.stringify(data, null, 2));

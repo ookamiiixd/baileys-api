@@ -1,23 +1,22 @@
 import { Router } from 'express';
-import { list } from '../controllers/chat';
-import { find } from '../controllers/message';
-import requestValidator from '../middlewares/request-validator';
 import { query } from 'express-validator';
+import * as controller from '../controllers/chat';
+import requestValidator from '../middlewares/request-validator';
 
 const router = Router({ mergeParams: true });
 router.get(
   '/',
-  query('cursor').isString().optional(),
+  query('cursor').isNumeric().optional(),
   query('limit').isNumeric().optional(),
   requestValidator,
-  list
+  controller.list
 );
 router.get(
   '/:jid',
-  query('cursor').isString().optional(),
+  query('cursor').isNumeric().optional(),
   query('limit').isNumeric().optional(),
   requestValidator,
-  find
+  controller.find
 );
 
 export default router;

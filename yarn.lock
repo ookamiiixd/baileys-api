@@ -2,9 +2,10 @@
 # yarn lockfile v1
 
 
-"@adiwajshing/baileys@https://github.com/ookamiiixd/Baileys.git#build":
+"@adiwajshing/baileys@^5.0.0":
   version "5.0.0"
-  resolved "https://github.com/ookamiiixd/Baileys.git#edd03183e389a2ec9fc28323ebdf95fd0daf9f85"
+  resolved "https://registry.yarnpkg.com/@adiwajshing/baileys/-/baileys-5.0.0.tgz#17a3e48dd67d0f684d09d55fb8fb931345803bb6"
+  integrity sha512-AeNyYLfw1nhCwc7hDlMajU9Zr5DK4zmEO8rdrmxUR1qUbmhSKOL6IzwZpyvPjsXyHvl+oPMbp5k8+PX2p6RlJg==
   dependencies:
     "@hapi/boom" "^9.1.3"
     axios "^0.24.0"
@@ -119,6 +120,13 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
+
+"@ookamiiixd/baileys-store@^1.0.0-beta.0":
+  version "1.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@ookamiiixd/baileys-store/-/baileys-store-1.0.0-beta.0.tgz#1a2a5b2e0edd75c00d68a60c72bdf856dbc881e1"
+  integrity sha512-djOZUZLRtjEcoy8qt/wjuT7WNLh54CfZ0v1/f1g298kRvnDKLxSKuu1I/6hdTntPMyCoir95xQA/HTBbyCXheA==
+  dependencies:
+    tiny-invariant "^1.3.1"
 
 "@prisma/client@^4.7.1":
   version "4.7.1"
@@ -484,12 +492,6 @@ axios@^0.24.0:
   integrity sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==
   dependencies:
     follow-redirects "^1.14.4"
-
-"baileys-store@file:external/baileys-store-4.tgz":
-  version "1.0.0-beta.0"
-  resolved "file:external/baileys-store-4.tgz#609c4605e90d3d91226ad95c8d62271687ebba3c"
-  dependencies:
-    tiny-invariant "^1.3.1"
 
 balanced-match@^1.0.0:
   version "1.0.2"
@@ -1897,6 +1899,11 @@ prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
+
+prettier-plugin-organize-imports@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-organize-imports/-/prettier-plugin-organize-imports-3.2.1.tgz#7e0e0a18457e0166e740daaff1aed1c08069fcb9"
+  integrity sha512-bty7C2Ecard5EOXirtzeCAqj4FU4epeuWrQt/Z+sh8UVEpBlBZ3m3KNPz2kFu7KgRTQx/C9o4/TdquPD1jOqjQ==
 
 prettier@^2.8.0:
   version "2.8.1"

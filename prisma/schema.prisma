@@ -55,7 +55,6 @@ model Chat {
   unreadCount               Int?
   unreadMentionCount        Int?
   wallpaper                 Json?
-  // Taken from https://github.com/adiwajshing/Baileys/blob/30e2cb5c4c8ca84b1814574ed4ce74f8f8f89ecf/src/Types/Chat.ts#L39
   lastMessageRecvTimestamp  Int?
 
   @@unique([sessionId, id], map: "unique_id_per_session_id")
