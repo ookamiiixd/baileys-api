@@ -4,3 +4,10 @@ debug/
 prisma/migrations/
 .env
 *.tgz
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+.npmrc
