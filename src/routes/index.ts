@@ -11,5 +11,8 @@ router.use('/:sessionId/chats', chatRoutes);
 router.use('/:sessionId/contacts', contactRoutes);
 router.use('/:sessionId/groups', groupRoutes);
 router.use('/:sessionId/messages', messageRoutes);
+router.get('/health', (req, res) => {
+  res.status(200).send({status: 'ok'});
+});
 
 export default router;
