@@ -9,5 +9,3 @@ prisma/migrations/
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
-
-.npmrc
