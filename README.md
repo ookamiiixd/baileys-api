@@ -5,18 +5,59 @@ An implementation of [@adiwajshing/Baileys](https://github.com/adiwajshing/Baile
 ## Requirements
 
 - **NodeJS** version **14.5.0** or higher
+- **Prisma** [supported databases](https://www.prisma.io/docs/reference/database-reference/supported-databases). Tested on MySQL and PostgreSQL
 
 ## Installation
 
-1. Download or clone this repo. If you want to skip the build step, you can download the prebuilt one from the release page
-1. Enter to the project directory
-1. Install the dependencies
-1. Build the project using the `build` script. You can skip this part if you're using the prebuilt one from the release page
+1. Download or clone this repo. If you want to skip the build step, you can download the prebuilt one (file with the `baileys-api-VERSION.tgz` name pattern) from the release page
+2. Enter to the project directory
+3. Install the dependencies
+
+```sh
+# npm
+npm install
+
+# yarn
+yarn
+```
+
+4. Build the project using the `build` script
+
+```sh
+# npm
+npm run build
+
+# yarn
+yarn build
+```
+
+You can skip this part if you're using the prebuilt one from the release page
 
 ## Setup
 
 1. Copy the `.env.example` file and rename it into `.env`, then update your [connection url](https://www.prisma.io/docs/reference/database-reference/connection-urls) in the `DATABASE_URL` field
-1. Run your [migration](https://www.prisma.io/docs/reference/api-reference/command-reference#prisma-migrate). Don't forget to always re-run your migration whenever there's a change on the `prisma/` directory
+1. Update your [provider](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#fields) in the `prisma/schema.prisma` file if you're using database other than MySQL
+1. Run your [migration](https://www.prisma.io/docs/reference/api-reference/command-reference#prisma-migrate)
+
+```sh
+# npm
+npx prisma migrate (dev|deploy)
+
+# yarn
+yarn prisma migrate (dev|deploy)
+```
+
+or push the schema
+
+```sh
+# npm
+npx prisma db push
+
+# yarn
+yarn prisma db push
+```
+
+Don't forget to always re-run those whenever there's a change on the `prisma/schema.prisma` file
 
 ## `.env` Configurations
 
@@ -45,8 +86,17 @@ LOG_LEVEL="warn"
 
 ## Usage
 
-1. Make sure to build the project first using the `build` script
+1. Make sure you have completed the **Installation** and **Setup** step
 1. You can then start the app using the `start` script
+
+```sh
+# npm
+npm run start
+
+# yarn
+yarn start
+```
+
 1. Now the endpoint should be available according to your environment variables configuration. Default is at `http://localhost:3000`
 
 ## API Docs
@@ -55,7 +105,7 @@ The API documentation is available online [here](https://documenter.getpostman.c
 
 ## Notes
 
-- There's no authentication, you may want to implement your own. I don't want to force anyone to use a specific authentication method, choose whatever you love
+- There's no authentication, you may want to implement your own. I don't want to force anyone into using a specific authentication method, choose whatever you love
 
 ## Notice
 
