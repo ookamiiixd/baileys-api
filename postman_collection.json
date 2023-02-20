@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "df663a45-5b31-42f6-9960-a8aab090b558",
     "name": "Baileys API v1.0.0-beta.0",
-    "description": "API documentation for [https://github.com/ookamiiixd/baileys-api](https://github.com/ookamiiixd/baileys-api)\n\nNote that all the `POST` route expect a JSON body, so make sure to include the header",
+    "description": "API documentation for [https://github.com/ookamiiixd/baileys-api](https://github.com/ookamiiixd/baileys-api)\n\nNote that all the `POST` routes expect a JSON body, so make sure to include the header",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "18988925"
   },
@@ -10,6 +10,74 @@
     {
       "name": "Sessions",
       "item": [
+        {
+          "name": "List Sessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/sessions",
+              "host": ["{{BASE_URL}}"],
+              "path": ["sessions"]
+            },
+            "description": "Return list of all sessions and its status"
+          },
+          "response": [
+            {
+              "name": "Response Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/sessions",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["sessions"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "76"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"4c-BziKD/6SFOaCZ9uZlY3sFIseQ0E\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 20 Feb 2023 17:07:42 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n    {\n        \"id\": \"john\",\n        \"status\": \"AUTHENTICATED\"\n    },\n    {\n        \"id\": \"john2\",\n        \"status\": \"CONNECTED\"\n    }\n]"
+            }
+          ]
+        },
         {
           "name": "Find Session",
           "request": {
@@ -311,7 +379,7 @@
               "host": ["{{BASE_URL}}"],
               "path": ["sessions", "add"]
             },
-            "description": "Create new a session. Expect an object with `sessionId` props. You can also pass additional [baileys socket options](https://github.com/adiwajshing/Baileys#configuring-the-connection) there. Keep in mind that you can only pass JSON-parsable options\n\nExample:\n\n``` json\n{\n  \"sessionId\": \"john\",\n  \"syncFullHistory: true // Emulate WA desktop app to receive more messages\n}\n\n```"
+            "description": "Create new a session. Expect an object with `sessionId` props. You can also pass additional [baileys socket options](https://github.com/adiwajshing/Baileys#configuring-the-connection) there. Keep in mind that you can only pass JSON-parsable options\n\nExample:\n\n``` json\n{\n  \"sessionId\": \"john\",\n  // Additional session options\n  \"readIncomingMessages\": true // Automatically read all incoming messages\n  // Additional Baileys socket options\n  \"syncFullHistory\": true // Emulate WA desktop app to receive more messages\n  // ...etc\n}\n\n```"
           },
           "response": [
             {
@@ -391,8 +459,10 @@
                   }
                 },
                 "url": {
-                  "raw": "{{BASE_URL}}/sessions/add",
-                  "host": ["{{BASE_URL}}"],
+                  "raw": "http://localhost:3000/sessions/add",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
                   "path": ["sessions", "add"]
                 }
               },
@@ -455,7 +525,7 @@
                 }
               ]
             },
-            "description": "Create a session and listen to the connection update in realtime. For the usage example, please see [here](https://github.com/ookamiiixd/baileys-api/blob/dev/examples/sse.html)\n\nNotes:\n\n- Unlike `Add Session` route, you can't add additional socket options in this route\n- If you exceed the maximum QR generation attempts, the connection will be closed\n- If you try to access this route using a session id that already in use, the route will simply emit an error message and close the connection. This also mean that if you lost a connection after successfully authenticated, you lost the access to subscribe the realtime data"
+            "description": "Create a session and listen to the connection update in realtime. For the usage example, please see [here](https://github.com/ookamiiixd/baileys-api/blob/dev/examples/sse.html)\n\nNotes:\n\n- Unlike `Add Session` route, you can't add additional options in this route\n- If you exceed the maximum QR generation attempts, the connection will be closed\n- If you try to access this route using a session id that already in use, the route will simply emit an error message and close the connection. This also mean that if you lost a connection after successfully authenticated, you lost the access to subscribe the realtime data"
           },
           "response": [
             {
@@ -2808,10 +2878,8 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:3000/:sessionId/messages/send/bulk",
-                  "protocol": "http",
-                  "host": ["localhost"],
-                  "port": "3000",
+                  "raw": "{{BASE_URL}}/:sessionId/messages/send/bulk",
+                  "host": ["{{BASE_URL}}"],
                   "path": [":sessionId", "messages", "send", "bulk"],
                   "variable": [
                     {
@@ -2928,6 +2996,106 @@
               ],
               "cookie": [],
               "body": "{\n    \"results\": [],\n    \"errors\": [\n        {\n            \"index\": 0,\n            \"error\": \"An error occured during message send\"\n        },\n        {\n            \"index\": 1,\n            \"error\": \"An error occured during message send\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Download Message Media",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": \"FA85D84D835A5XXXXXXXXXXXX\",\r\n  \"ephemeralOutOfSync\": false,\r\n  \"key\": {\r\n    \"id\": \"FA85D84D835A5XXXXXXXXXXXX\",\r\n    \"fromMe\": false,\r\n    \"remoteJid\": \"62823xxxxx@s.whatsapp.net\"\r\n  },\r\n  \"labels\": [],\r\n  \"mediaData\": {\r\n    \"localPath\": \"Media/WhatsApp Images/IMG-20230205-WA0000.jpg\"\r\n  },\r\n  \"message\": {\r\n    \"imageMessage\": {\r\n      \"url\": \"https://mmg.whatsapp.net/v/t62.7118-24/xxxxxxxxxxxxxx.enc?ccb=11-4&oh=xxxxxxxx&oe=xxxxx&mms3=true\",\r\n      \"width\": 738,\r\n      \"height\": 1600,\r\n      \"mediaKey\": \"xxxxxxxx/xxxxxxx+xxxxxxxxxx=\",\r\n      \"mimetype\": \"image/jpeg\",\r\n      \"directPath\": \"/v/t62.7118-24/xxxxxxxxxxxx.enc?ccb=11-4&oh=xxxxxxx&oe=xxxx\",\r\n      \"fileLength\": \"148979\",\r\n      \"fileSha256\": \"xxxxxxxxx+xxxxxxxxxx=\",\r\n      \"scanLengths\": [11804, 74479, 27132, 35564],\r\n      \"scansSidecar\": \"xxxxxxxxxxxxx+xxx==\",\r\n      \"fileEncSha256\": \"xxxxxxxxx+0k=\",\r\n      \"mediaKeyTimestamp\": \"1675586197\",\r\n      \"midQualityFileSha256\": \"xxxxxxxxxx/xxxxxxxxxx+xxxxxxx=\"\r\n    }\r\n  },\r\n  \"messageStubParameters\": [],\r\n  \"messageTimestamp\": \"1675586199\",\r\n  \"pollUpdates\": [],\r\n  \"reactions\": [],\r\n  \"userReceipt\": []\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/:sessionId/messages/download",
+              "host": ["{{BASE_URL}}"],
+              "path": [":sessionId", "messages", "download"],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "john",
+                  "description": "Session id"
+                }
+              ]
+            },
+            "description": "Download media from a message. Return the media with its associated content type on success"
+          },
+          "response": [
+            {
+              "name": "Response Failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"id\": \"FA85D84D835A5XXXXXXXXXXXX\",\r\n  \"ephemeralOutOfSync\": false,\r\n  \"key\": {\r\n    \"id\": \"FA85D84D835A5XXXXXXXXXXXX\",\r\n    \"fromMe\": false,\r\n    \"remoteJid\": \"62823xxxxx@s.whatsapp.net\"\r\n  },\r\n  \"labels\": [],\r\n  \"mediaData\": {\r\n    \"localPath\": \"Media/WhatsApp Images/IMG-20230205-WA0000.jpg\"\r\n  },\r\n  \"message\": {\r\n    \"imageMessage\": {\r\n      \"url\": \"https://mmg.whatsapp.net/v/t62.7118-24/xxxxxxxxxxxxxx.enc?ccb=11-4&oh=xxxxxxxx&oe=xxxxx&mms3=true\",\r\n      \"width\": 738,\r\n      \"height\": 1600,\r\n      \"mediaKey\": \"xxxxxxxx/xxxxxxx+xxxxxxxxxx=\",\r\n      \"mimetype\": \"image/jpeg\",\r\n      \"directPath\": \"/v/t62.7118-24/xxxxxxxxxxxx.enc?ccb=11-4&oh=xxxxxxx&oe=xxxx\",\r\n      \"fileLength\": \"148979\",\r\n      \"fileSha256\": \"xxxxxxxxx+xxxxxxxxxx=\",\r\n      \"scanLengths\": [11804, 74479, 27132, 35564],\r\n      \"scansSidecar\": \"xxxxxxxxxxxxx+xxx==\",\r\n      \"fileEncSha256\": \"xxxxxxxxx+0k=\",\r\n      \"mediaKeyTimestamp\": \"1675586197\",\r\n      \"midQualityFileSha256\": \"xxxxxxxxxx/xxxxxxxxxx+xxxxxxx=\"\r\n    }\r\n  },\r\n  \"messageStubParameters\": [],\r\n  \"messageTimestamp\": \"1675586199\",\r\n  \"pollUpdates\": [],\r\n  \"reactions\": [],\r\n  \"userReceipt\": []\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/:sessionId/messages/download",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": [":sessionId", "messages", "download"],
+                  "variable": [
+                    {
+                      "key": "sessionId",
+                      "value": "john",
+                      "description": "Session id"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "327"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"147-uzjVxFQmRFBfTvxqegxOJwD/Mao\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Jan 2023 15:27:17 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": \"An error occured during message media download\"\n}"
             }
           ]
         }

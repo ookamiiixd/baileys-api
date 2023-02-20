@@ -1,4 +1,5 @@
-import type { proto } from '@adiwajshing/baileys';
+import type { proto, WAGenericMediaMessage, WAMessage } from '@adiwajshing/baileys';
+import { downloadMediaMessage } from '@adiwajshing/baileys';
 import { serializePrisma } from '@ookamiiixd/baileys-store';
 import type { RequestHandler } from 'express';
 import { logger, prisma } from '../shared';
@@ -78,4 +79,27 @@ export const sendBulk: RequestHandler = async (req, res) => {
   res
     .status(req.body.length !== 0 && errors.length === req.body.length ? 500 : 200)
     .json({ results, errors });
+};
+
+export const download: RequestHandler = async (req, res) => {
+  try {
+    const session = getSession(req.params.sessionId)!;
+    const message = req.body as WAMessage;
+    const type = Object.keys(message.message!)[0] as keyof proto.IMessage;
+    const content = message.message![type] as WAGenericMediaMessage;
+    const buffer = await downloadMediaMessage(
+      message,
+      'buffer',
+      {},
+      { logger, reuploadRequest: session.updateMediaMessage }
+    );
+
+    res.setHeader('Content-Type', content.mimetype!);
+    res.write(buffer);
+    res.end();
+  } catch (e) {
+    const message = 'An error occured during message media download';
+    logger.error(e, message);
+    res.status(500).json({ error: message });
+  }
 };

@@ -11,7 +11,9 @@ import type { Response } from 'express';
 // import { writeFile } from 'fs/promises';
 // import { join } from 'path';
 import { toDataURL } from 'qrcode';
+import type { WebSocket } from 'ws';
 import { logger, prisma } from './shared';
+import { delay } from './utils';
 
 type Session = WASocket & {
   destroy: () => Promise<void>;
@@ -35,7 +37,8 @@ export async function init() {
   });
 
   for (const { sessionId, data } of sessions) {
-    createSession({ sessionId, socketConfig: JSON.parse(data) });
+    const { readIncomingMessages, ...socketConfig } = JSON.parse(data);
+    createSession({ sessionId, readIncomingMessages, socketConfig });
   }
 }
 
@@ -54,11 +57,12 @@ type createSessionOptions = {
   sessionId: string;
   res?: Response;
   SSE?: boolean;
+  readIncomingMessages?: boolean;
   socketConfig?: SocketConfig;
 };
 
 export async function createSession(options: createSessionOptions) {
-  const { sessionId, res, SSE = false, socketConfig } = options;
+  const { sessionId, res, SSE = false, readIncomingMessages = false, socketConfig } = options;
   const configID = `${SESSION_CONFIG_ID}-${sessionId}`;
   let connectionState: Partial<ConnectionState> = { connection: 'close' };
 
@@ -174,6 +178,16 @@ export async function createSession(options: createSessionOptions) {
     handleConnectionUpdate();
   });
 
+  if (readIncomingMessages) {
+    socket.ev.on('messages.upsert', async (m) => {
+      const message = m.messages[0];
+      if (message.key.fromMe || m.type !== 'notify') return;
+
+      await delay(1000);
+      await socket.readMessages([message.key]);
+    });
+  }
+
   // Debug events
   // socket.ev.on('messaging-history.set', (data) => dump('messaging-history.set', data));
   // socket.ev.on('chats.upsert', (data) => dump('chats.upsert', data));
@@ -181,10 +195,28 @@ export async function createSession(options: createSessionOptions) {
   // socket.ev.on('groups.upsert', (data) => dump('groups.upsert', data));
 
   await prisma.session.upsert({
-    create: { id: configID, sessionId, data: JSON.stringify(socketConfig || {}) },
+    create: {
+      id: configID,
+      sessionId,
+      data: JSON.stringify({ readIncomingMessages, ...socketConfig }),
+    },
     update: {},
     where: { sessionId_id: { id: configID, sessionId } },
   });
+}
+
+export function getSessionStatus(session: Session) {
+  const state = ['CONNECTING', 'CONNECTED', 'DISCONNECTING', 'DISCONNECTED'];
+  let status = state[(session.ws as WebSocket).readyState];
+  status = session.user ? 'AUTHENTICATED' : status;
+  return status;
+}
+
+export function listSessions() {
+  return Array.from(sessions.entries()).map(([id, session]) => ({
+    id,
+    status: getSessionStatus(session),
+  }));
 }
 
 export function getSession(sessionId: string) {

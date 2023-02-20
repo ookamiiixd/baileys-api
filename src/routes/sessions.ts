@@ -5,6 +5,7 @@ import requestValidator from '../middlewares/request-validator';
 import sessionValidator from '../middlewares/session-validator';
 
 const router = Router();
+router.get('/', controller.list);
 router.get('/:sessionId', sessionValidator, controller.find);
 router.get('/:sessionId/status', sessionValidator, controller.status);
 router.post('/add', body('sessionId').isString().notEmpty(), requestValidator, controller.add);
