@@ -14,21 +14,13 @@ An implementation of [@adiwajshing/Baileys](https://github.com/adiwajshing/Baile
 3. Install the dependencies
 
 ```sh
-# npm
 npm install
-
-# yarn
-yarn
 ```
 
 4. Build the project using the `build` script
 
 ```sh
-# npm
 npm run build
-
-# yarn
-yarn build
 ```
 
 You can skip this part if you're using the prebuilt one from the release page
@@ -40,21 +32,13 @@ You can skip this part if you're using the prebuilt one from the release page
 1. Run your [migration](https://www.prisma.io/docs/reference/api-reference/command-reference#prisma-migrate)
 
 ```sh
-# npm
 npx prisma migrate (dev|deploy)
-
-# yarn
-yarn prisma migrate (dev|deploy)
 ```
 
 or push the schema
 
 ```sh
-# npm
 npx prisma db push
-
-# yarn
-yarn prisma db push
 ```
 
 Don't forget to always re-run those whenever there's a change on the `prisma/schema.prisma` file
@@ -90,11 +74,7 @@ LOG_LEVEL="warn"
 1. You can then start the app using the `start` script
 
 ```sh
-# npm
 npm run start
-
-# yarn
-yarn start
 ```
 
 1. Now the endpoint should be available according to your environment variables configuration. Default is at `http://localhost:3000`
