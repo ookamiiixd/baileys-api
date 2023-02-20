@@ -29,5 +29,12 @@ router.post(
   sessionValidator,
   controller.sendBulk
 );
+router.post(
+  '/download',
+  body().isObject().notEmpty(),
+  requestValidator,
+  sessionValidator,
+  controller.download
+);
 
 export default router;
