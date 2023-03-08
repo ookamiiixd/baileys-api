@@ -11,8 +11,8 @@ datasource db {
 }
 
 model Chat {
-  pkId                      Int      @id @map("_id")
-  sessionId                 String   @db.String
+  pkId                      String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionId                 String   @db.ObjectId
   archived                  Boolean?
   contactPrimaryIdentityKey Bytes?
   conversationTimestamp     BigInt?
@@ -25,7 +25,7 @@ model Chat {
   endOfHistoryTransferType  Int?
   ephemeralExpiration       Int?
   ephemeralSettingTimestamp BigInt?
-  id                        String   @db.String
+  id                        String   @db.ObjectId
   isDefaultSubgroup         Boolean?
   isParentGroup             Boolean?
   lastMsgTimestamp          BigInt?
@@ -62,8 +62,8 @@ model Chat {
 }
 
 model Contact {
-  pkId         Int     @id @map("_id")
-  sessionId    String  @db.String
+  pkId         String  @id @default(auto()) @map("_id") @db.ObjectId
+  sessionId    String  @db.ObjectId
   id           String  @db.String
   name         String? @db.String
   notify       String? @db.String
@@ -76,8 +76,8 @@ model Contact {
 }
 
 model GroupMetadata {
-  pkId              Int      @id @map("_id")
-  sessionId         String   @db.String
+  pkId              String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionId         String   @db.ObjectId
   id                String   @db.String
   owner             String?  @db.String
   subject           String   @db.String
@@ -99,11 +99,11 @@ model GroupMetadata {
 }
 
 model Message {
-  pkId                            Int      @id @map("_id")
-  sessionId                       String   @db.String
+  pkId                            String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionId                       String   @db.ObjectId
   remoteJid                       String   @db.String
   id                              String   @db.String
-  agentId                         String?  @db.String
+  agentId                         String?  @db.ObjectId
   bizPrivacyStatus                Int?
   broadcast                       Boolean?
   clearMedia                      Boolean?
@@ -152,8 +152,8 @@ model Message {
 }
 
 model Session {
-  pkId      Int    @id @map("_id")
-  sessionId String @db.String
+  pkId      String @id @default(auto()) @map("_id") @db.ObjectId
+  sessionId String @db.ObjectId
   id        String @db.String
   data      String @db.String
 
