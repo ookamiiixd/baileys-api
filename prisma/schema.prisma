@@ -11,38 +11,38 @@ datasource db {
 }
 
 model Chat {
-  pkId                      Int      @id @default(autoincrement())
-  sessionId                 String   @db.VarChar(128)
+  pkId                      BigInt   @id @default(autoincrement())
+  sessionId                 String
   archived                  Boolean?
   contactPrimaryIdentityKey Bytes?
   conversationTimestamp     BigInt?
   createdAt                 BigInt?
-  createdBy                 String?  @db.VarChar(128)
-  description               String?  @db.VarChar(255)
+  createdBy                 String?
+  description               String?
   disappearingMode          Json?
-  displayName               String?  @db.VarChar(128)
+  displayName               String?
   endOfHistoryTransfer      Boolean?
   endOfHistoryTransferType  Int?
   ephemeralExpiration       Int?
   ephemeralSettingTimestamp BigInt?
-  id                        String   @db.VarChar(128)
+  id                        String
   isDefaultSubgroup         Boolean?
   isParentGroup             Boolean?
   lastMsgTimestamp          BigInt?
-  lidJid                    String?  @db.VarChar(128)
+  lidJid                    String?
   markedAsUnread            Boolean?
   mediaVisibility           Int?
   messages                  Json?
   muteEndTime               BigInt?
-  name                      String?  @db.VarChar(128)
-  newJid                    String?  @db.VarChar(128)
+  name                      String?
+  newJid                    String?
   notSpam                   Boolean?
-  oldJid                    String?  @db.VarChar(128)
-  pHash                     String?  @db.VarChar(128)
-  parentGroupId             String?  @db.VarChar(128)
+  oldJid                    String?
+  pHash                     String?
+  parentGroupId             String?
   participant               Json?
   pinned                    Int?
-  pnJid                     String?  @db.VarChar(128)
+  pnJid                     String?
   pnhDuplicateLidThread     Boolean?
   readOnly                  Boolean?
   shareOwnPn                Boolean?
@@ -57,53 +57,30 @@ model Chat {
   wallpaper                 Json?
   lastMessageRecvTimestamp  Int?
 
-  @@unique([sessionId, id], map: "unique_id_per_session_id")
+  @@unique([sessionId, id], map: "unique_id_per_session_id_chat")
   @@index([sessionId])
 }
 
 model Contact {
-  pkId         Int     @id @default(autoincrement())
-  sessionId    String  @db.VarChar(128)
-  id           String  @db.VarChar(128)
-  name         String? @db.VarChar(128)
-  notify       String? @db.VarChar(128)
-  verifiedName String? @db.VarChar(128)
-  imgUrl       String? @db.VarChar(255)
-  status       String? @db.VarChar(128)
+  pkId         BigInt  @id @default(autoincrement())
+  sessionId    String
+  id           String
+  name         String?
+  notify       String?
+  verifiedName String?
+  imgUrl       String?
+  status       String?
 
-  @@unique([sessionId, id], map: "unique_id_per_session_id")
-  @@index([sessionId])
-}
-
-model GroupMetadata {
-  pkId              Int      @id @default(autoincrement())
-  sessionId         String   @db.VarChar(128)
-  id                String   @db.VarChar(128)
-  owner             String?  @db.VarChar(128)
-  subject           String   @db.VarChar(128)
-  subjectOwner      String?  @db.VarChar(128)
-  subjectTime       Int?
-  creation          Int?
-  desc              String?  @db.VarChar(255)
-  descOwner         String?  @db.VarChar(128)
-  descId            String?  @db.VarChar(128)
-  restrict          Boolean?
-  announce          Boolean?
-  size              Int?
-  participants      Json
-  ephemeralDuration Int?
-  inviteCode        String?  @db.VarChar(255)
-
-  @@unique([sessionId, id], map: "unique_id_per_session_id")
+  @@unique([sessionId, id], map: "unique_id_per_session_id_contact")
   @@index([sessionId])
 }
 
 model Message {
-  pkId                            Int      @id @default(autoincrement())
-  sessionId                       String   @db.VarChar(128)
-  remoteJid                       String   @db.VarChar(128)
-  id                              String   @db.VarChar(128)
-  agentId                         String?  @db.VarChar(128)
+  pkId                            BigInt   @id @default(autoincrement())
+  sessionId                       String
+  remoteJid                       String
+  id                              String
+  agentId                         String?
   bizPrivacyStatus                Int?
   broadcast                       Boolean?
   clearMedia                      Boolean?
@@ -127,13 +104,13 @@ model Message {
   messageStubType                 Int?
   messageTimestamp                BigInt?
   multicast                       Boolean?
-  originalSelfAuthorUserJidString String?  @db.VarChar(128)
-  participant                     String?  @db.VarChar(128)
+  originalSelfAuthorUserJidString String?
+  participant                     String?
   paymentInfo                     Json?
   photoChange                     Json?
   pollAdditionalMetadata          Json?
   pollUpdates                     Json?
-  pushName                        String?  @db.VarChar(128)
+  pushName                        String?
   quotedPaymentInfo               Json?
   quotedStickerData               Json?
   reactions                       Json?
@@ -145,18 +122,18 @@ model Message {
   urlNumber                       Boolean?
   urlText                         Boolean?
   userReceipt                     Json?
-  verifiedBizName                 String?  @db.VarChar(128)
+  verifiedBizName                 String?
 
   @@unique([sessionId, remoteJid, id], map: "unique_message_key_per_session_id")
   @@index([sessionId])
 }
 
 model Session {
-  pkId      Int    @id @default(autoincrement())
-  sessionId String @db.VarChar(128)
-  id        String @db.VarChar(255)
+  pkId      BigInt @id @default(autoincrement())
+  sessionId String
+  id        String
   data      String @db.Text
 
-  @@unique([sessionId, id], map: "unique_id_per_session_id")
+  @@unique([sessionId, id], map: "unique_id_per_session_id_session")
   @@index([sessionId])
 }
