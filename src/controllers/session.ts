@@ -16,8 +16,10 @@ export const find: RequestHandler = (req, res) =>
   res.status(200).json({ message: 'Session found' });
 
 export const status: RequestHandler = (req, res) => {
-  const session = getSession(req.params.sessionId)!;
-  res.status(200).json({ status: getSessionStatus(session) });
+
+export const qr: RequestHandler = (req, res) => {
+  const session = Session.get(req.params.sessionId)!;
+  res.status(200).json({ qr: session.QR() });
 };
 
 export const add: RequestHandler = async (req, res) => {

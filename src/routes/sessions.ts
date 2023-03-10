@@ -8,6 +8,7 @@ const router = Router();
 router.get('/', controller.list);
 router.get('/:sessionId', sessionValidator, controller.find);
 router.get('/:sessionId/status', sessionValidator, controller.status);
+router.get('/:sessionId/qr', sessionValidator, controller.qr);
 router.post('/add', body('sessionId').isString().notEmpty(), requestValidator, controller.add);
 router.get('/:sessionId/add-sse', controller.addSSE);
 router.delete('/:sessionId', sessionValidator, controller.del);
