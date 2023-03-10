@@ -1,18 +1,21 @@
+import { serializePrisma } from '@ookamiiixd/baileys-store';
 import type { RequestHandler } from 'express';
 import { logger, prisma } from '../shared';
-import { getSession } from '../wa';
+import { Session } from '../wa';
 import { makePhotoURLHandler } from './misc';
 
 export const list: RequestHandler = async (req, res) => {
   try {
     const { sessionId } = req.params;
     const { cursor = undefined, limit = 25 } = req.query;
-    const groups = await prisma.contact.findMany({
-      cursor: cursor ? { pkId: Number(cursor) } : undefined,
-      take: Number(limit),
-      skip: cursor ? 1 : 0,
-      where: { id: { endsWith: 'g.us' }, sessionId },
-    });
+    const groups = (
+      await prisma.contact.findMany({
+        cursor: cursor ? { pkId: Number(cursor) } : undefined,
+        take: Number(limit),
+        skip: cursor ? 1 : 0,
+        where: { id: { endsWith: 'g.us' }, sessionId },
+      })
+    ).map((m) => serializePrisma(m));
 
     res.status(200).json({
       data: groups,
@@ -31,8 +34,8 @@ export const list: RequestHandler = async (req, res) => {
 export const find: RequestHandler = async (req, res) => {
   try {
     const { sessionId, jid } = req.params;
-    const session = getSession(sessionId)!;
-    const data = await session.groupMetadata(jid);
+    const session = Session.get(sessionId)!;
+    const data = await session.socket.groupMetadata(jid);
     res.status(200).json(data);
   } catch (e) {
     const message = 'An error occured during group metadata fetch';

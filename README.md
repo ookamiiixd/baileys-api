@@ -4,8 +4,8 @@ An implementation of [@adiwajshing/Baileys](https://github.com/adiwajshing/Baile
 
 ## Requirements
 
-- **NodeJS** version **14.5.0** or higher
-- **Prisma** [supported databases](https://www.prisma.io/docs/reference/database-reference/supported-databases). Tested on MySQL and PostgreSQL
+- **NodeJS** version **14.7.0** or higher
+- **Prisma** [supported databases](https://github.com/ookamiiixd/baileys-store#supported-databases). Tested on MySQL and PostgreSQL
 
 ## Installation
 
@@ -17,7 +17,9 @@ An implementation of [@adiwajshing/Baileys](https://github.com/adiwajshing/Baile
 npm install
 ```
 
-4. Build the project using the `build` script
+4. Follow guide in the `Setup` section to setup your database first
+
+5. Build the project using the `build` script
 
 ```sh
 npm run build
@@ -61,8 +63,8 @@ RECONNECT_INTERVAL="5000"
 # Maximum Reconnect Attempts
 MAX_RECONNECT_RETRIES="5"
 
-# Maximum SSE QR Generation Attempts
-SSE_MAX_QR_GENERATION="10"
+# Maximum QR Generation Attempts
+MAX_QR_GENERATION="10"
 
 # Pino Logger Level
 LOG_LEVEL="warn"
@@ -70,18 +72,18 @@ LOG_LEVEL="warn"
 
 ## Usage
 
-1. Make sure you have completed the **Installation** and **Setup** step
+1. Make sure you have completed all of the step in the **Installation** and **Setup** section
 1. You can then start the app using the `start` script
 
 ```sh
 npm run start
 ```
 
-1. Now the endpoint should be available according to your environment variables configuration. Default is at `http://localhost:3000`
+Now the endpoint should be available according to your environment variables configuration. Default is at `http://localhost:3000`
 
 ## API Docs
 
-The API documentation is available online [here](https://documenter.getpostman.com/view/18988925/2s8Z73zWbg). You can also import the **Postman Collection File** `(postman_collection.json)` into your Postman App alternatively
+The API documentation is available online [here](https://documenter.getpostman.com/view/18988925/2s8Z73zWbg). You can also import the **Postman Collection File** `(postman_collection.json)` into your Postman App alternatively. The online version is always up-to-date with current development version, so make sure you read the right documentation version
 
 ## Notes
 
