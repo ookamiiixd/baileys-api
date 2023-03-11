@@ -7,15 +7,15 @@ import sessionValidator from '../middlewares/session-validator';
 const router = Router({ mergeParams: true });
 router.get(
   '/',
-  query('cursor').isNumeric().optional(),
-  query('limit').isNumeric().optional(),
+  query('cursor').isInt().optional(),
+  query('limit').isInt().optional(),
   requestValidator,
   controller.list
 );
 router.post(
   '/send',
   body('jid').isString().notEmpty(),
-  body('type').isString().isIn(['group', 'number']).optional(),
+  body('type').isIn(['group', 'number']).optional(),
   body('message').isObject().notEmpty(),
   body('options').isObject().optional(),
   requestValidator,
@@ -24,7 +24,12 @@ router.post(
 );
 router.post(
   '/send/bulk',
-  body().isArray().notEmpty(),
+  body().isArray({ min: 1 }),
+  body('*.jid').isString().notEmpty(),
+  body('*.type').isIn(['group', 'number']).optional(),
+  body('*.message').isObject().notEmpty(),
+  body('*.options').isObject().optional(),
+  body('*.delay').isInt().optional(),
   requestValidator,
   sessionValidator,
   controller.sendBulk

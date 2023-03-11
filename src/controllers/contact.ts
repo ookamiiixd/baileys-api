@@ -46,7 +46,7 @@ export const listBlocked: RequestHandler = async (req, res) => {
 export const updateBlock: RequestHandler = async (req, res) => {
   try {
     const session = Session.get(req.params.sessionId)!;
-    const { jid, action = 'block' } = req.body;
+    const { jid, action } = req.body;
 
     const exists = await session.jidExists(jid);
     if (!exists) return res.status(400).json({ error: 'Jid does not exists' });

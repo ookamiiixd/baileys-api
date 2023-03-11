@@ -6,15 +6,15 @@ import requestValidator from '../middlewares/request-validator';
 const router = Router({ mergeParams: true });
 router.get(
   '/',
-  query('cursor').isNumeric().optional(),
-  query('limit').isNumeric().optional(),
+  query('cursor').isInt().optional(),
+  query('limit').isInt().optional(),
   requestValidator,
   controller.list
 );
 router.get(
   '/:jid',
-  query('cursor').isNumeric().optional(),
-  query('limit').isNumeric().optional(),
+  query('cursor').isInt().optional(),
+  query('limit').isInt().optional(),
   requestValidator,
   controller.find
 );

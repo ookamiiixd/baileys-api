@@ -15,17 +15,17 @@ import type { WebSocket } from 'ws';
 import { logger, prisma } from './shared';
 import { delay, pick } from './utils';
 
-const sessions = new Map<string, Session & { store: Store }>();
+const sessions = new Map<string, Session>();
 const retries = new Map<string, number>();
 const QRGenerations = new Map<string, number>();
 
 const RECONNECT_INTERVAL = Number(process.env.RECONNECT_INTERVAL || 0);
 const MAX_RECONNECT_RETRIES = Number(process.env.MAX_RECONNECT_RETRIES || 5);
 const MAX_QR_GENERATION = Number(process.env.MAX_QR_GENERATION || 5);
-const SESSION_CONFIG_ID = 'session-config';
+export const SESSION_CONFIG_ID = 'session-config';
 
 function shouldReconnect(sessionId: string) {
-  let attempts = retries.get(sessionId) ?? 1;
+  let attempts = retries.get(sessionId) ?? 0;
 
   if (attempts < MAX_RECONNECT_RETRIES) {
     attempts += 1;
@@ -43,8 +43,9 @@ export async function init() {
   });
 
   for (const { sessionId, data } of sessions) {
-    const { readIncomingMessages, proxy, ...socketConfig } = JSON.parse(data);
-    Session.create({ sessionId, readIncomingMessages, proxy, socketConfig });
+    const { readIncomingMessages, proxy, webhook, ...socketConfig } = JSON.parse(data);
+    console.log(JSON.parse(data));
+    Session.create({ sessionId, readIncomingMessages, proxy, webhook, socketConfig });
   }
 }
 
@@ -55,7 +56,7 @@ type SessionOptions = {
   readIncomingMessages?: boolean;
   proxy?: string;
   webhook?: {
-    url: string[];
+    url: string | string[];
     events: 'all' | (keyof BaileysEventMap)[];
   };
   socketConfig?: SocketConfig;
@@ -65,6 +66,7 @@ export class Session {
   private connectionState: Partial<ConnectionState> = { connection: 'close' };
   private lastGeneratedQR: string | null = null;
   public readonly socket: ReturnType<typeof makeWASocket>;
+  public readonly store: Store;
 
   constructor(
     private readonly sessionState: Awaited<ReturnType<typeof useSession>>,
@@ -92,15 +94,17 @@ export class Session {
     });
 
     this.bindEvents();
-    sessions.set(sessionId, { ...this, store: new Store(sessionId, this.socket.ev) });
+    this.store = new Store(sessionId, this.socket.ev);
+    sessions.set(sessionId, this);
   }
 
   public static async create(options: SessionOptions) {
-    options = { readIncomingMessages: false, SSE: false, ...options };
-    const { sessionId, readIncomingMessages, socketConfig } = options;
+    const { sessionId, readIncomingMessages = false, proxy, webhook, socketConfig } = options;
     const configID = `${SESSION_CONFIG_ID}-${sessionId}`;
     const data = JSON.stringify({
-      readIncomingMessages: readIncomingMessages,
+      readIncomingMessages,
+      proxy,
+      webhook,
       ...socketConfig,
     });
 
@@ -165,9 +169,13 @@ export class Session {
 
   public async destroy(logout = true) {
     const { sessionId } = this.options;
+    const ws = this.socket.ws;
     try {
       await Promise.all([
-        logout && this.socket.logout(),
+        logout &&
+          ws.readyState !== ws.CLOSING &&
+          ws.readyState !== ws.CLOSED &&
+          this.socket.logout(),
         prisma.chat.deleteMany({ where: { sessionId } }),
         prisma.contact.deleteMany({ where: { sessionId } }),
         prisma.message.deleteMany({ where: { sessionId } }),
@@ -177,6 +185,8 @@ export class Session {
       logger.error(e, 'An error occured during session destroy');
     } finally {
       sessions.delete(sessionId);
+      retries.delete(sessionId);
+      QRGenerations.delete(sessionId);
     }
   }
 
@@ -188,6 +198,7 @@ export class Session {
       const { connection } = update;
 
       if (connection === 'open') {
+        this.lastGeneratedQR = null;
         retries.delete(sessionId);
         QRGenerations.delete(sessionId);
       } else if (connection === 'close') this.handleConnectionClose();
@@ -205,15 +216,15 @@ export class Session {
     }
 
     if (webhook) {
-      this.socket.ev.process(async (events) => {
-        const data = webhook.events === 'all' ? events : pick(events, webhook.events);
+      const { url, events } = webhook;
+      this.socket.ev.process(async (socketEvents) => {
+        const data = events === 'all' ? socketEvents : pick(socketEvents, events);
+        if (Object.keys(data).length <= 0) return;
+
         try {
           await Promise.any(
-            webhook.url.map((url) =>
-              axios.post(url, JSON.stringify(data), {
-                headers: {
-                  'Content-Type': 'application/json',
-                },
+            (typeof url === 'string' ? [url] : url).map((url) =>
+              axios.post(url, data, {
                 timeout: 5000,
               })
             )
@@ -229,7 +240,7 @@ export class Session {
     const { sessionId, res, SSE } = this.options;
     const { qr } = this.connectionState;
     let generatedQR: string | null = null;
-    const currentQRGenerations = QRGenerations.get(sessionId) ?? 1;
+    const currentQRGenerations = QRGenerations.get(sessionId) ?? -1;
 
     if (qr) {
       try {
@@ -269,7 +280,7 @@ export class Session {
     const doNotReconnect = !shouldReconnect(sessionId);
 
     if (code === DisconnectReason.loggedOut || doNotReconnect) {
-      if (res && res.writableEnded) {
+      if (res && !res.writableEnded) {
         !SSE && res.status(500).json({ error: 'Unable to create session' });
         res.end();
       }
@@ -277,10 +288,7 @@ export class Session {
     }
 
     if (!restartRequired) {
-      logger.info(
-        { attempts: retries.get(sessionId) ?? 1, sessionId: sessionId },
-        'Reconnecting...'
-      );
+      logger.info({ attempts: retries.get(sessionId) ?? 1, sessionId }, 'Reconnecting...');
     }
     setTimeout(() => Session.create(this.options), restartRequired ? 0 : RECONNECT_INTERVAL);
   }

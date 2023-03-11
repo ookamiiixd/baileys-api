@@ -66,7 +66,7 @@ export const sendBulk: RequestHandler = async (req, res) => {
         continue;
       }
 
-      if (index > 0) await delayMs(delay);
+      if (index > 0) await delayMs(Number(delay));
       const result = await session.socket.sendMessage(jid, message, options);
       results.push({ index, result });
     } catch (e) {

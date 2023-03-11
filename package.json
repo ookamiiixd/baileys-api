@@ -21,8 +21,8 @@
   "dependencies": {
     "@adiwajshing/baileys": "^5.0.0",
     "@hapi/boom": "^10.0.0",
-    "@ookamiiixd/baileys-store": "file:debug/ookamiiixd-baileys-store-v1.0.0-beta.1.tgz",
     "@prisma/client": "^4.7.1",
+    "@ookamiiixd/baileys-store": "file:debug/ookamiiixd-baileys-store-v1.0.0-beta.1.tgz",
     "axios": "^1.3.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",

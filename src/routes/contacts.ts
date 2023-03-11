@@ -7,8 +7,8 @@ import sessionValidator from '../middlewares/session-validator';
 const router = Router({ mergeParams: true });
 router.get(
   '/',
-  query('cursor').isNumeric().optional(),
-  query('limit').isNumeric().optional(),
+  query('cursor').isInt().optional(),
+  query('limit').isInt().optional(),
   requestValidator,
   controller.list
 );
@@ -16,7 +16,7 @@ router.get('/blocklist', sessionValidator, controller.listBlocked);
 router.post(
   '/blocklist/update',
   body('jid').isString().notEmpty(),
-  body('action').isString().isIn(['block', 'unblock']).optional(),
+  body('action').isIn(['block', 'unblock']),
   requestValidator,
   sessionValidator,
   controller.updateBlock
