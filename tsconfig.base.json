@@ -1,0 +1,29 @@
+{
+	"compilerOptions": {
+		// Environment setup & latest features
+		"lib": ["ESNext"],
+		"target": "es2022",
+		"module": "nodenext",
+		"moduleDetection": "force",
+		"allowJs": true,
+		"moduleResolution": "nodenext",
+		"verbatimModuleSyntax": true,
+
+		// Best practices
+		"strict": true,
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+
+		// Some stricter flags (disabled by default)
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noPropertyAccessFromIndexSignature": false,
+
+		// effect recommended
+		"incremental": true,
+		"exactOptionalPropertyTypes": true,
+		"plugins": [{ "name": "@effect/language-service" }]
+	}
+}

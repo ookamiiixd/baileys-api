@@ -1,0 +1,23 @@
+{
+	"formatter": {
+		"language_server": {
+			"name": "biome"
+		}
+	},
+	"code_actions_on_format": {
+		"source.organizeImports.biome": true,
+		"source.fixAll.biome": true
+	},
+	"lsp": {
+		"vtsls": {
+			"initialization_options": {
+				"typescript": {
+					"tsdk": "./node_modules/typescript/lib"
+				},
+				"vtsls": {
+					"autoUseWorkspaceTsdk": true
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"files": [],
+	"references": [
+		{ "path": "./tsconfig.app.json" },
+		{ "path": "./tsconfig.node.json" },
+		{ "path": "./../../packages/shared" }
+	],
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": { "~/*": ["./src/*"] }
+	}
+}

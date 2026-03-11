@@ -1,0 +1,31 @@
+{
+	"name": "@wavvy/shared",
+	"private": true,
+	"version": "0.1.0",
+	"type": "module",
+	"exports": {
+		"./*": {
+			"import": "./dist/*.js",
+			"types": "./dist/*.d.ts"
+		}
+	},
+	"scripts": {
+		"dev": "tsc -b --watch",
+		"build": "tsc -b",
+		"format": "biome format . --write",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint . --write",
+		"typecheck": "tsc -b --noEmit"
+	},
+	"dependencies": {
+		"@effect/platform": "catalog:",
+		"effect": "catalog:",
+		"long": "^5.3.2"
+	},
+	"devDependencies": {
+		"@types/bun": "catalog:",
+		"@biomejs/biome": "catalog:",
+		"baileys": "catalog:",
+		"typescript": "catalog:"
+	}
+}

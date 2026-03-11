@@ -1,0 +1,9 @@
+{
+	"extends": "./../../tsconfig.base.json",
+	"include": ["./src/**/*.ts"],
+	"references": [{ "path": "./../../packages/shared" }],
+	"compilerOptions": {
+		"noEmit": true,
+		"paths": { "~/*": ["./src/*"] }
+	}
+}
